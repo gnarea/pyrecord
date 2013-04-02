@@ -1,5 +1,6 @@
 from inspect import isabstract
 
+from nose.plugins.skip import SkipTest
 from nose.tools import assert_raises
 from nose.tools import eq_
 from nose.tools import ok_
@@ -34,13 +35,13 @@ class TestRecordType(object):
         ok_(issubclass(Circle, Point))
     
     def test_creation_with_ilegal_type_name(self):
-        assert 0
+        raise SkipTest
     
     def test_creation_with_ilegal_field_name(self):
-        assert 0
+        raise SkipTest
     
     def test_creation_with_duplicated_field_names(self):
-        assert 0
+        raise SkipTest
 
 
 class TestRecordInitialization(object):
@@ -122,32 +123,32 @@ class TestRecordInitialization(object):
 class TestRecordComparison(object):
     
     def test_same_type_and_same_field_values(self):
-        assert 0
+        raise SkipTest
     
     def test_same_type_and_different_field_values(self):
-        assert 0
+        raise SkipTest
     
     def test_specialization(self):
-        assert 0
+        raise SkipTest
 
 
 class TestRecordFieldAccess(object):
     
     def test_getting_valid_field(self):
-        assert 0
+        raise SkipTest
     
     def test_getting_invalid_field(self):
-        assert 0
+        raise SkipTest
     
     def test_getting_all_field_values(self):
-        assert 0
+        raise SkipTest
     
     def test_setting_valid_field(self):
-        assert 0
+        raise SkipTest
     
     def test_setting_invalid_field(self):
-        assert 0
+        raise SkipTest
 
 
 def test_representation():
-    assert 0 # repr()
+    raise SkipTest # repr()
