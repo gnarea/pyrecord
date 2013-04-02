@@ -6,12 +6,6 @@ from nose.tools import ok_
 from pyrecord._generic_utilities import get_duplicated_iterable_items
 
 
-__all__ = [
-    "TestDuplicatedIterableItems",
-    "TestPythonIdentifierCheck",
-    ]
-
-
 class TestDuplicatedIterableItems(object):
     
     def test_no_items(self):
