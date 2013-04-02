@@ -20,4 +20,12 @@ def get_duplicated_iterable_items(iterable):
 
 
 def is_valid_python_identifier(identifier):
+    """
+    Report whether ``identifier`` is a valid string for an identifier in Python.
+    
+    The syntax for a valid Python identifier is officially described on the
+    following URL:
+    http://docs.python.org/2/reference/lexical_analysis.html#identifiers
+    
+    """
     raise NotImplementedError
