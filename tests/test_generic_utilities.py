@@ -8,6 +8,7 @@ from pyrecord._generic_utilities import get_duplicated_iterable_items
 
 __all__ = [
     "TestDuplicatedIterableItems",
+    "TestPythonIdentifierCheck",
     ]
 
 
@@ -41,3 +42,12 @@ class TestDuplicatedIterableItems(object):
         eq_(2, len(duplicated_items))
         ok_(1 in duplicated_items)
         ok_(2 in duplicated_items)
+
+
+class TestPythonIdentifierCheck(object):
+    
+    def test_valid_identifiers(self):
+        raise SkipTest
+    
+    def test_invalid_identifiers(self):
+        raise SkipTest

@@ -1,5 +1,6 @@
 __all__ = [
     "get_duplicated_iterable_items",
+    "is_valid_python_identifier",
     ]
 
 
@@ -16,3 +17,7 @@ def get_duplicated_iterable_items(iterable):
             unique_items.append(item)
     
     return duplicated_items
+
+
+def is_valid_python_identifier(identifier):
+    raise NotImplementedError
