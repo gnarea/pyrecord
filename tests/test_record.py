@@ -71,7 +71,7 @@ class TestRecordType(object):
             coordinate_x=2,
             )
         
-        # Different fields
+        # Multiple fields duplicated
         assert_raises_regexp(
             RecordTypeError,
             "^The following field names are duplicated: " \
