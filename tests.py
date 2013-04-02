@@ -189,6 +189,9 @@ class TestRecordFieldAccess(object):
     
     def test_setting_invalid_field(self):
         raise SkipTest
+    
+    def test_deleting_field(self):
+        raise SkipTest
 
 
 def test_representation():
