@@ -36,7 +36,7 @@ class Record(object):
         _enforce_field_name_validity(all_field_names)
         
         record_type = type(type_name, (cls, ), {})
-        record_type.field_names = tuple(all_field_names)
+        record_type.field_names = all_field_names
         record_type._default_values_by_field_name = dict(
              cls._default_values_by_field_name,
              **default_values_by_field_name
