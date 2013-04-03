@@ -49,6 +49,12 @@ class Record(object):
         return record_type
     
     @classmethod
+    def extend_type(cls, subtype_name, *field_names, **default_values_by_field_name):
+        record_supertype = cls
+        record_subtype = type(subtype_name, (record_supertype, ), {})
+        return record_subtype
+
+    @classmethod
     def get_field_names(cls):
         pass
 
