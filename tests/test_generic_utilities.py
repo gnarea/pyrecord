@@ -1,9 +1,9 @@
-from unittest.case import SkipTest
-
+from nose.tools import assert_false
 from nose.tools import eq_
 from nose.tools import ok_
 
 from pyrecord._generic_utilities import get_duplicated_iterable_items
+from pyrecord._generic_utilities import is_valid_python_identifier
 
 
 class TestDuplicatedIterableItems(object):
@@ -41,7 +41,24 @@ class TestDuplicatedIterableItems(object):
 class TestPythonIdentifierCheck(object):
     
     def test_valid_identifiers(self):
-        raise SkipTest
+        valid_identifiers = (
+            "_",
+            "_var",
+            "_3",
+            "variable",
+            "VARIABLE",
+            "variable1",
+            "variable_1",
+            )
+        for identifier in valid_identifiers:
+            ok_(is_valid_python_identifier(identifier), identifier)
     
     def test_invalid_identifiers(self):
-        raise SkipTest
+        invalid_identifiers = (
+            "",
+            "1variable",
+            "variable-1",
+            "variable.1",
+            )
+        for identifier in invalid_identifiers:
+            assert_false(is_valid_python_identifier(identifier), identifier)
