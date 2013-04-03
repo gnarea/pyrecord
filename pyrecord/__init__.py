@@ -29,12 +29,14 @@ class Record(object):
     def create_type(cls, type_name, *field_names, **default_values_by_field_name):
         _enforce_type_name_validity(type_name)
         
-        all_field_names = cls.field_names + \
-            field_names + \
+        # Validate field names
+        new_field_names = field_names + \
             tuple(default_values_by_field_name.keys())
+        all_field_names = cls.field_names + new_field_names
         _enforce_field_name_uniqueness(all_field_names)
-        _enforce_field_name_validity(all_field_names)
+        _enforce_field_name_validity(new_field_names)
         
+        # Create the record type
         record_type = type(type_name, (cls, ), {})
         record_type.field_names = all_field_names
         record_type._default_values_by_field_name = dict(
