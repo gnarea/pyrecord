@@ -2,6 +2,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 
 from pyrecord._generic_utilities import get_duplicated_iterable_items
+from pyrecord._generic_utilities import is_valid_python_identifier
 
 
 __all__ = [
@@ -22,7 +23,21 @@ class Record(object):
     
     @classmethod
     def create_type(cls, type_name, *field_names, **default_values_by_field_name):
+        if not is_valid_python_identifier(type_name):
+            raise RecordTypeError(
+                "{} is not a valid identifier for a record type".format(
+                    repr(type_name),
+                    ),
+                )
+        
         all_field_names = list(field_names) + default_values_by_field_name.keys()
+        
+        for field_name in all_field_names:
+            if not is_valid_python_identifier(field_name):
+                raise RecordTypeError(
+                    "{} is not a valid field name".format(repr(field_name)),
+                    )
+        
         duplicated_field_names = get_duplicated_iterable_items(all_field_names)
         if duplicated_field_names:
             duplicated_field_names_as_string = ", ".join(duplicated_field_names)
