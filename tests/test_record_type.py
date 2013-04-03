@@ -23,7 +23,7 @@ def test_creation():
 
 def test_subtype_creation():
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    Circle = Point.extend_type("Circle", "radius")
+    Circle = Point.create_type("Circle", "radius")
     eq_("Circle", Circle.__name__)
     ok_(issubclass(Circle, Point))
     assert_not_equals(Circle, Point)
@@ -35,7 +35,7 @@ def test_creation_with_ilegal_type_name():
     
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises(RecordTypeError, Point.extend_type, "Invalid-Name")
+    assert_raises(RecordTypeError, Point.create_type, "Invalid-Name")
 
 
 def test_creation_with_ilegal_field_name():
@@ -49,7 +49,7 @@ def test_creation_with_ilegal_field_name():
     
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises(RecordTypeError, Point.extend_type, "Circle", "Invalid-Field")
+    assert_raises(RecordTypeError, Point.create_type, "Circle", "Invalid-Field")
 
 
 def test_creation_with_duplicated_field_names():
@@ -91,7 +91,7 @@ def test_creation_with_duplicated_field_names():
     assert_raises_regexp(
         RecordTypeError,
         "^The following field names are duplicated: radius$",
-        Point.extend_type,
+        Point.create_type,
         "Circle",
         "radius",
         "radius",
@@ -102,7 +102,7 @@ def test_creation_with_duplicated_field_names():
     assert_raises_regexp(
         RecordTypeError,
         "^The following field names are duplicated: coordinate_x$",
-        Point.extend_type,
+        Point.create_type,
         "Circle",
         "radius",
         "coordinate_x",
@@ -110,19 +110,23 @@ def test_creation_with_duplicated_field_names():
 
 
 def test_getting_field_names():
-    eq_(0, len(Record.get_field_names()))
-    
     # Supertype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    point_field_names = Point.get_field_names()
-    eq_(2, len(point_field_names))
-    ok_("coordinate_x" in point_field_names)
-    ok_("coordinate_y" in point_field_names)
+    eq_(2, len(Point.field_names))
+    ok_("coordinate_x" in Point.field_names)
+    ok_("coordinate_y" in Point.field_names)
     
     # Subtype
-    Point3D = Point.extend_type("Point3D", "coordinate_z")
-    point_3d_field_names = Point3D.get_field_names()
-    eq_(3, len(point_3d_field_names))
-    ok_("coordinate_x" in point_3d_field_names)
-    ok_("coordinate_y" in point_3d_field_names)
-    ok_("coordinate_z" in point_3d_field_names)
+    Circle = Point.create_type("Circle", "radius")
+    eq_(3, len(Circle.field_names))
+    ok_("coordinate_x" in Circle.field_names)
+    ok_("coordinate_y" in Circle.field_names)
+    ok_("radius" in Circle.field_names)
+    
+    # Default field values
+    Sphere = Circle.create_type("Sphere", coordinate_z=1)
+    eq_(4, len(Sphere.field_names))
+    ok_("coordinate_x" in Sphere.field_names)
+    ok_("coordinate_y" in Sphere.field_names)
+    ok_("coordinate_z" in Sphere.field_names)
+    ok_("radius" in Sphere.field_names)

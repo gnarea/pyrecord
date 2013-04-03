@@ -18,7 +18,7 @@ class TestInitialization(object):
     
     def test_subtype_initialization(self):
         Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-        Circle = Point.extend_type("Circle", "radius")
+        Circle = Point.create_type("Circle", "radius")
         my_circle = Circle(1, 3, 5)
         eq_(my_circle.coordinate_x, 1)
         eq_(my_circle.coordinate_y, 3)
@@ -63,7 +63,7 @@ class TestInitialization(object):
     
     def test_generalization(self):
         Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-        Circle = Point.extend_type("Circle", "radius")
+        Circle = Point.create_type("Circle", "radius")
         
         my_circle = Circle(1, 3, 5)
         my_point = Point.init_from_specialization(my_circle)
@@ -73,7 +73,7 @@ class TestInitialization(object):
     
     def test_specialization(self):
         Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-        Circle = Point.extend_type("Circle", "radius")
+        Circle = Point.create_type("Circle", "radius")
         
         my_point = Point(1, 3)
         my_circle = Circle.init_from_generalization(my_point, radius=5)

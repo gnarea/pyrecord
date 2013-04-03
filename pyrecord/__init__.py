@@ -17,46 +17,31 @@ class Record(object):
     
     __metaclass__ = ABCMeta
     
+    field_names = ()
+    
+    _default_values_by_field_name = {}
+    
     @abstractmethod
     def __init__(self):
         super(Record, self).__init__()
     
     @classmethod
     def create_type(cls, type_name, *field_names, **default_values_by_field_name):
-        if not is_valid_python_identifier(type_name):
-            raise RecordTypeError(
-                "{} is not a valid identifier for a record type".format(
-                    repr(type_name),
-                    ),
-                )
+        _enforce_type_name_validity(type_name)
         
-        all_field_names = list(field_names) + default_values_by_field_name.keys()
-        
-        for field_name in all_field_names:
-            if not is_valid_python_identifier(field_name):
-                raise RecordTypeError(
-                    "{} is not a valid field name".format(repr(field_name)),
-                    )
-        
-        duplicated_field_names = get_duplicated_iterable_items(all_field_names)
-        if duplicated_field_names:
-            duplicated_field_names_as_string = ", ".join(duplicated_field_names)
-            exception_message = "The following field names are duplicated: {}" \
-                .format(duplicated_field_names_as_string)
-            raise RecordTypeError(exception_message)
+        all_field_names = cls.field_names + \
+            field_names + \
+            tuple(default_values_by_field_name.keys())
+        _enforce_field_name_uniqueness(all_field_names)
+        _enforce_field_name_validity(all_field_names)
         
         record_type = type(type_name, (cls, ), {})
+        record_type.field_names = tuple(all_field_names)
+        record_type._default_values_by_field_name = dict(
+             cls._default_values_by_field_name,
+             **default_values_by_field_name
+             )
         return record_type
-    
-    @classmethod
-    def extend_type(cls, subtype_name, *field_names, **default_values_by_field_name):
-        record_supertype = cls
-        record_subtype = type(subtype_name, (record_supertype, ), {})
-        return record_subtype
-
-    @classmethod
-    def get_field_names(cls):
-        pass
 
 
 #{ Exceptions
@@ -72,6 +57,35 @@ class RecordTypeError(RecordException):
 
 class RecordInitializationError(RecordException):
     pass
+
+
+#{ Validators
+
+
+def _enforce_type_name_validity(type_name):
+    if not is_valid_python_identifier(type_name):
+        raise RecordTypeError(
+            "{} is not a valid identifier for a record type".format(
+                repr(type_name),
+                ),
+            )
+
+
+def _enforce_field_name_validity(field_names):
+    for field_name in field_names:
+        if not is_valid_python_identifier(field_name):
+            raise RecordTypeError(
+                "{} is not a valid field name".format(repr(field_name)),
+                )
+
+
+def _enforce_field_name_uniqueness(field_names):
+    duplicated_field_names = get_duplicated_iterable_items(field_names)
+    if duplicated_field_names:
+        duplicated_field_names_as_string = ", ".join(duplicated_field_names)
+        exception_message = "The following field names are duplicated: {}" \
+            .format(duplicated_field_names_as_string)
+        raise RecordTypeError(exception_message)
 
 
 #}
