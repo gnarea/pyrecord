@@ -30,16 +30,26 @@ def test_subtype_creation():
 
 
 def test_creation_with_ilegal_type_name():
+    # Supertype
     assert_raises(RecordTypeError, Record.create_type, "Invalid-Name")
+    
+    # Subtype
+    Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+    assert_raises(RecordTypeError, Point.extend_type, "Invalid-Name")
 
 
 def test_creation_with_ilegal_field_name():
+    # Supertype
     assert_raises(
         RecordTypeError,
         Record.create_type,
         "Point",
         "coordinate-x",
         )
+    
+    # Subtype
+    Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+    assert_raises(RecordTypeError, Point.extend_type, "Circle", "Invalid-Field")
 
 
 def test_creation_with_duplicated_field_names():
@@ -74,4 +84,26 @@ def test_creation_with_duplicated_field_names():
         "coordinate_y",
         coordinate_x=2,
         coordinate_y=2,
+        )
+    
+    # Subtype
+    Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+    assert_raises_regexp(
+        RecordTypeError,
+        "^The following field names are duplicated: radius$",
+        Point.extend_type,
+        "Circle",
+        "radius",
+        "radius",
+        )
+    
+    # Subtype redefining field
+    Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+    assert_raises_regexp(
+        RecordTypeError,
+        "^The following field names are duplicated: coordinate_x$",
+        Point.extend_type,
+        "Circle",
+        "radius",
+        "coordinate_x",
         )
