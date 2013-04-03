@@ -47,6 +47,10 @@ class Record(object):
         
         record_type = type(type_name, (cls, ), {})
         return record_type
+    
+    @classmethod
+    def get_field_names(cls):
+        pass
 
 
 #{ Exceptions

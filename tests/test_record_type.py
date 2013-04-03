@@ -107,3 +107,22 @@ def test_creation_with_duplicated_field_names():
         "radius",
         "coordinate_x",
         )
+
+
+def test_getting_field_names():
+    eq_(0, len(Record.get_field_names()))
+    
+    # Supertype
+    Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+    point_field_names = Point.get_field_names()
+    eq_(2, len(point_field_names))
+    ok_("coordinate_x" in point_field_names)
+    ok_("coordinate_y" in point_field_names)
+    
+    # Subtype
+    Point3D = Point.extend_type("Point3D", "coordinate_z")
+    point_3d_field_names = Point3D.get_field_names()
+    eq_(3, len(point_3d_field_names))
+    ok_("coordinate_x" in point_3d_field_names)
+    ok_("coordinate_y" in point_3d_field_names)
+    ok_("coordinate_z" in point_3d_field_names)
