@@ -63,27 +63,17 @@ def test_creation_with_duplicated_field_names():
         "coordinate_x",
         )
     
-    # Same field duplicated by position and name
-    assert_raises_regexp(
-        RecordTypeError,
-        "^The following field names are duplicated: coordinate_x$",
-        Record.create_type,
-        "Point",
-        "coordinate_x",
-        coordinate_x=2,
-        )
-    
     # Multiple fields duplicated
     assert_raises_regexp(
         RecordTypeError,
         "^The following field names are duplicated: " \
-            "coordinate_y, coordinate_x$",
+            "coordinate_x, coordinate_y$",
         Record.create_type,
         "Point",
         "coordinate_x",
         "coordinate_y",
-        coordinate_x=2,
-        coordinate_y=2,
+        "coordinate_x",
+        "coordinate_y",
         )
     
     # Subtype
@@ -97,7 +87,7 @@ def test_creation_with_duplicated_field_names():
         "radius",
         )
     
-    # Subtype redefining field
+    # Subtype redefining field in supertype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
     assert_raises_regexp(
         RecordTypeError,
@@ -112,21 +102,32 @@ def test_creation_with_duplicated_field_names():
 def test_getting_field_names():
     # Supertype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    eq_(2, len(Point.field_names))
-    ok_("coordinate_x" in Point.field_names)
-    ok_("coordinate_y" in Point.field_names)
+    eq_(("coordinate_x", "coordinate_y"), Point.field_names)
     
     # Subtype
     Circle = Point.create_type("Circle", "radius")
-    eq_(3, len(Circle.field_names))
-    ok_("coordinate_x" in Circle.field_names)
-    ok_("coordinate_y" in Circle.field_names)
-    ok_("radius" in Circle.field_names)
+    eq_(("coordinate_x", "coordinate_y", "radius"), Circle.field_names)
+
+
+def test_default_value_for_undefined_field():
+    # Supertype
+    assert_raises_regexp(
+        RecordTypeError,
+        '^Unknown field "weight"$',
+        Record.create_type,
+        "Point",
+        "coordinate_x",
+        weight=3,
+        )
     
-    # Default field values
-    Sphere = Circle.create_type("Sphere", coordinate_z=1)
-    eq_(4, len(Sphere.field_names))
-    ok_("coordinate_x" in Sphere.field_names)
-    ok_("coordinate_y" in Sphere.field_names)
-    ok_("coordinate_z" in Sphere.field_names)
-    ok_("radius" in Sphere.field_names)
+    # Subtype
+    Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+    assert_raises_regexp(
+        RecordTypeError,
+        '^Unknown field "weight"$',
+        Point.create_type,
+        "Circle",
+        "radius",
+        weight=3,
+        )
+    
