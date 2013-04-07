@@ -1,5 +1,4 @@
 from abc import ABCMeta
-from abc import abstractmethod
 
 from pyrecord._generic_utilities import get_duplicated_iterable_items
 from pyrecord._generic_utilities import is_valid_python_identifier
@@ -21,9 +20,71 @@ class Record(object):
     
     _default_values_by_field_name = {}
     
-    @abstractmethod
-    def __init__(self):
+    def __init__(self, *field_values, **values_by_field_name):
         super(Record, self).__init__()
+        
+        self._validate_field_values(field_values, values_by_field_name)
+        self._values_by_field_name = self._get_all_values_by_field_name(
+            field_values,
+            values_by_field_name,
+            )
+    
+    def copy(self):
+        field_values = {field_name: getattr(self, field_name) for field_name in self.field_names}
+        record_copy = self.__class__(**field_values)
+        return record_copy
+    
+    def __getattr__(self, name):
+        if name in self.field_names:
+            attribute_value = self._values_by_field_name[name]
+        else:
+            attribute_value = super(Record, self).__getattr__(name)
+        return attribute_value
+    
+    @classmethod
+    def _validate_field_values(cls, field_values, values_by_field_name):
+        unknown_field_values_count = len(field_values) - len(cls.field_names)
+        if 0 < unknown_field_values_count:
+            raise RecordInitializationError(
+                "Too many field values: Cannot map {} values to fields".format(
+                    unknown_field_values_count,
+                    )
+                )
+        
+        for field_name in values_by_field_name:
+            if field_name not in cls.field_names:
+                raise RecordInitializationError(
+                    'Unknown field "{}"'.format(field_name),
+                    )
+        
+        fields_set_by_position = cls.field_names[:len(field_values)]
+        for field_name in values_by_field_name:
+            if field_name in fields_set_by_position:
+                raise RecordInitializationError(
+                    'Value of field "{}" is already set'.format(field_name),
+                    )
+        
+        fields_set = \
+            fields_set_by_position + \
+            tuple(values_by_field_name.keys()) + \
+            tuple(cls._default_values_by_field_name.keys())
+        for field_name in cls.field_names:
+            if field_name not in fields_set:
+                raise RecordInitializationError(
+                    'Field "{}" is undefined'.format(field_name),
+                    )
+    
+    @classmethod
+    def _get_all_values_by_field_name(cls, field_values, values_by_field_name):
+        all_values_by_field_name = cls._default_values_by_field_name.copy()
+        all_values_by_field_name.update(values_by_field_name)
+        
+        for field_name, field_value in zip(cls.field_names, field_values):
+            all_values_by_field_name[field_name] = field_value
+        
+        return all_values_by_field_name
+    
+    #{ Record type API
     
     @classmethod
     def create_type(
@@ -71,6 +132,8 @@ class Record(object):
              **default_values_by_field_name
              )
         return record_type
+    
+    #}
 
 
 #{ Exceptions
