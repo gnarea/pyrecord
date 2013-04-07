@@ -100,6 +100,18 @@ class TestInitialization(object):
         eq_(my_point.coordinate_x, 1)
         eq_(my_point.coordinate_y, 3)
     
+    def test_invalid_generalization(self):
+        Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+        Circle = Point.create_type("Circle", "radius")
+        
+        my_point = Point(1, 3)
+        assert_raises_regexp(
+            RecordInitializationError,
+            "^Record type Point is not a subtype of Circle$",
+            Circle.init_from_specialization,
+            my_point,
+            )
+    
     def test_specialization(self):
         Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
         Circle = Point.create_type("Circle", "radius")
@@ -110,6 +122,24 @@ class TestInitialization(object):
         eq_(my_circle.coordinate_x, 1)
         eq_(my_circle.coordinate_y, 3)
         eq_(my_circle.radius, 5)
+    
+    def test_invalid_specialization(self):
+        Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+        Circle = Point.create_type("Circle", "radius")
+        
+        my_circle = Circle(1, 3, 5)
+        assert_raises_regexp(
+            RecordInitializationError,
+            "^Record type Circle is not a supertype of Point$",
+            Point.init_from_generalization,
+            my_circle,
+            )
+    
+    def test_incomplete_specialization(self):
+        raise SkipTest
+    
+    def test_specialization_overriding_field_values(self):
+        raise SkipTest
 
 
 class TestComparison(object):
@@ -122,6 +152,7 @@ class TestComparison(object):
     
     def test_specialization(self):
         raise SkipTest
+    
     def test_copy(self):
         raise SkipTest
 
