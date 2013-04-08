@@ -1,5 +1,4 @@
 from nose.plugins.skip import SkipTest
-from nose.tools import assert_raises
 from nose.tools import assert_raises_regexp
 from nose.tools import eq_
 from nose.tools import ok_
