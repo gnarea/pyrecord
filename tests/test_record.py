@@ -96,8 +96,8 @@ class TestInitialization(object):
         my_circle = Circle(1, 3, 5)
         my_point = Point.init_from_specialization(my_circle)
         ok_(isinstance(my_point, Point))
-        eq_(my_point.coordinate_x, 1)
-        eq_(my_point.coordinate_y, 3)
+        eq_(my_point.coordinate_x, my_circle.coordinate_x)
+        eq_(my_point.coordinate_y, my_circle.coordinate_y)
     
     def test_invalid_generalization(self):
         Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
@@ -118,8 +118,8 @@ class TestInitialization(object):
         my_point = Point(1, 3)
         my_circle = Circle.init_from_generalization(my_point, radius=5)
         ok_(isinstance(my_circle, Circle))
-        eq_(my_circle.coordinate_x, 1)
-        eq_(my_circle.coordinate_y, 3)
+        eq_(my_circle.coordinate_x, my_point.coordinate_x)
+        eq_(my_circle.coordinate_y, my_point.coordinate_y)
         eq_(my_circle.radius, 5)
     
     def test_invalid_specialization(self):
@@ -129,16 +129,36 @@ class TestInitialization(object):
         my_circle = Circle(1, 3, 5)
         assert_raises_regexp(
             RecordInitializationError,
-            "^Record type Circle is not a supertype of Point$",
+            "^Record type Point is not a subtype of Circle$",
             Point.init_from_generalization,
             my_circle,
             )
     
     def test_incomplete_specialization(self):
-        raise SkipTest
+        Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+        Circle = Point.create_type("Circle", "radius")
+        
+        my_point = Point(1, 3)
+        assert_raises_regexp(
+            RecordInitializationError,
+            '^Field "radius" is undefined$',
+            Circle.init_from_generalization,
+            my_point,
+            )
     
     def test_specialization_overriding_field_values(self):
-        raise SkipTest
+        Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
+        Circle = Point.create_type("Circle", "radius")
+        
+        my_point = Point(1, 3)
+        assert_raises_regexp(
+            RecordInitializationError,
+            '^Field "coordinate_y" is not specific to Circle$',
+            Circle.init_from_generalization,
+            my_point,
+            radius=2,
+            coordinate_y=5,
+            )
 
 
 class TestComparison(object):

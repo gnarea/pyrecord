@@ -31,9 +31,57 @@ class Record(object):
     
     @classmethod
     def init_from_specialization(cls, specialized_record):
-        field_values = {
-            field_name: getattr(specialized_record, field_name) for field_name in cls.field_names}
-        return cls(**field_values)
+        specialized_record_type = specialized_record.__class__
+        if not issubclass(specialized_record_type, cls):
+            raise RecordInitializationError(
+                "Record type {} is not a subtype of {}".format(
+                    specialized_record_type.__name__,
+                    cls.__name__,
+                    ),
+                )
+        
+        values_by_field_name = {}
+        for field_name in cls.field_names:
+            values_by_field_name[field_name] = getattr(
+                specialized_record,
+                field_name,
+                )
+        generalized_record = cls(**values_by_field_name)
+        return generalized_record
+    
+    @classmethod
+    def init_from_generalization(
+        cls,
+        generalized_record,
+        **values_by_field_name
+        ):
+        generalized_record_type = generalized_record.__class__
+        if not issubclass(cls, generalized_record_type):
+            raise RecordInitializationError(
+                "Record type {} is not a subtype of {}".format(
+                    cls.__name__,
+                    generalized_record_type.__name__,
+                    )
+                )
+        
+        extra_specialization_field_names = set(cls.field_names) - \
+            set(generalized_record_type.field_names)
+        for field_name in values_by_field_name:
+            if field_name not in extra_specialization_field_names:
+                raise RecordInitializationError(
+                    'Field "{}" is not specific to {}'.format(
+                        field_name,
+                        cls.__name__,
+                        )
+                    )
+        
+        for field_name in generalized_record.field_names:
+            values_by_field_name[field_name] = getattr(
+                generalized_record,
+                field_name,
+                )
+        specialized_record = cls(**values_by_field_name)
+        return specialized_record
     
     def copy(self):
         field_values = {field_name: getattr(self, field_name) for field_name in self.field_names}
