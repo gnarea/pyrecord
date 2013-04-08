@@ -7,7 +7,7 @@ from nose.tools import eq_
 from nose.tools import ok_
 
 from pyrecord import Record
-from pyrecord import RecordTypeError
+from pyrecord.exceptions import RecordTypeError
 
 
 def test_abstract():

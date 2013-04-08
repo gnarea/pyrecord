@@ -4,7 +4,7 @@ from nose.tools import eq_
 from nose.tools import ok_
 
 from pyrecord import Record
-from pyrecord import RecordInitializationError
+from pyrecord import RecordInstanceError
 
 
 Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
@@ -42,7 +42,7 @@ class TestInitialization(object):
     
     def test_skipping_field_without_default_value(self):
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             '^Field "coordinate_x" is undefined$',
             Point,
             )
@@ -50,7 +50,7 @@ class TestInitialization(object):
     def test_setting_unknown_field(self):
         # By position
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             "^Too many field values: Cannot map 2 values to fields$",
             Point,
             1,
@@ -60,7 +60,7 @@ class TestInitialization(object):
             )
         # By name
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             '^Unknown field "coordinate_z"$',
             Point,
             1,
@@ -70,7 +70,7 @@ class TestInitialization(object):
     
     def test_field_value_set_multiple_times(self):
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             '^Value of field "coordinate_x" is already set$',
             Point,
             1,
@@ -98,7 +98,7 @@ class TestInitialization(object):
     def test_invalid_generalization(self):
         my_point = Point(1, 3)
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             "^Record type Point is not a subtype of Circle$",
             Circle.init_from_specialization,
             my_point,
@@ -115,7 +115,7 @@ class TestInitialization(object):
     def test_invalid_specialization(self):
         my_circle = Circle(1, 3, 5)
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             "^Record type Point is not a subtype of Circle$",
             Point.init_from_generalization,
             my_circle,
@@ -124,7 +124,7 @@ class TestInitialization(object):
     def test_incomplete_specialization(self):
         my_point = Point(1, 3)
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             '^Field "radius" is undefined$',
             Circle.init_from_generalization,
             my_point,
@@ -133,7 +133,7 @@ class TestInitialization(object):
     def test_specialization_overriding_field_values(self):
         my_point = Point(1, 3)
         assert_raises_regexp(
-            RecordInitializationError,
+            RecordInstanceError,
             '^Field "coordinate_y" is not specific to Circle$',
             Circle.init_from_generalization,
             my_point,

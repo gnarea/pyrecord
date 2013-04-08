@@ -2,8 +2,8 @@ from nose.tools import assert_false
 from nose.tools import eq_
 from nose.tools import ok_
 
-from pyrecord._generic_utilities import get_duplicated_iterable_items
-from pyrecord._generic_utilities import is_valid_python_identifier
+from pyrecord._validation._generic_utils import get_duplicated_iterable_items
+from pyrecord._validation._generic_utils import is_valid_python_identifier
 
 
 class TestDuplicatedIterableItems(object):

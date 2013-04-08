@@ -1,14 +1,16 @@
 from abc import ABCMeta
 
-from pyrecord._generic_utilities import get_duplicated_iterable_items
-from pyrecord._generic_utilities import is_valid_python_identifier
+from pyrecord._validation.instance_validators import require_type_inheritance
+from pyrecord._validation.type_validators import \
+    require_default_value_correspondance_to_existing_field
+from pyrecord._validation.type_validators import require_field_name_uniqueness
+from pyrecord._validation.type_validators import require_field_name_validity
+from pyrecord._validation.type_validators import require_type_name_validity
+from pyrecord.exceptions import RecordInstanceError
 
 
 __all__ = [
     "Record",
-    "RecordInitializationError",
-    "RecordException",
-    "RecordTypeError",
     ]
 
 
@@ -32,13 +34,7 @@ class Record(object):
     @classmethod
     def init_from_specialization(cls, specialized_record):
         specialized_record_type = specialized_record.__class__
-        if not issubclass(specialized_record_type, cls):
-            raise RecordInitializationError(
-                "Record type {} is not a subtype of {}".format(
-                    specialized_record_type.__name__,
-                    cls.__name__,
-                    ),
-                )
+        require_type_inheritance(specialized_record_type, cls)
         
         values_by_field_name = {}
         for field_name in cls.field_names:
@@ -56,19 +52,13 @@ class Record(object):
         **values_by_field_name
         ):
         generalized_record_type = generalized_record.__class__
-        if not issubclass(cls, generalized_record_type):
-            raise RecordInitializationError(
-                "Record type {} is not a subtype of {}".format(
-                    cls.__name__,
-                    generalized_record_type.__name__,
-                    )
-                )
+        require_type_inheritance(cls, generalized_record_type)
         
         extra_specialization_field_names = set(cls.field_names) - \
             set(generalized_record_type.field_names)
         for field_name in values_by_field_name:
             if field_name not in extra_specialization_field_names:
-                raise RecordInitializationError(
+                raise RecordInstanceError(
                     'Field "{}" is not specific to {}'.format(
                         field_name,
                         cls.__name__,
@@ -99,7 +89,7 @@ class Record(object):
     def _validate_field_values(cls, field_values, values_by_field_name):
         unknown_field_values_count = len(field_values) - len(cls.field_names)
         if 0 < unknown_field_values_count:
-            raise RecordInitializationError(
+            raise RecordInstanceError(
                 "Too many field values: Cannot map {} values to fields".format(
                     unknown_field_values_count,
                     )
@@ -107,14 +97,14 @@ class Record(object):
         
         for field_name in values_by_field_name:
             if field_name not in cls.field_names:
-                raise RecordInitializationError(
+                raise RecordInstanceError(
                     'Unknown field "{}"'.format(field_name),
                     )
         
         fields_set_by_position = cls.field_names[:len(field_values)]
         for field_name in values_by_field_name:
             if field_name in fields_set_by_position:
-                raise RecordInitializationError(
+                raise RecordInstanceError(
                     'Value of field "{}" is already set'.format(field_name),
                     )
         
@@ -124,7 +114,7 @@ class Record(object):
             tuple(cls._default_values_by_field_name.keys())
         for field_name in cls.field_names:
             if field_name not in fields_set:
-                raise RecordInitializationError(
+                raise RecordInstanceError(
                     'Field "{}" is undefined'.format(field_name),
                     )
     
@@ -168,11 +158,11 @@ class Record(object):
         field_names,
         default_values_by_field_name,
         ):
-        _enforce_type_name_validity(type_name)
+        require_type_name_validity(type_name)
         
-        _enforce_field_name_uniqueness(cls.field_names + field_names)
-        _enforce_field_name_validity(field_names)
-        _enforce_default_value_correspondance_to_existing_field(
+        require_field_name_uniqueness(cls.field_names + field_names)
+        require_field_name_validity(field_names)
+        require_default_value_correspondance_to_existing_field(
             field_names,
             default_values_by_field_name,
             )
@@ -188,59 +178,3 @@ class Record(object):
         return record_type
     
     #}
-
-
-#{ Exceptions
-
-
-class RecordException(Exception):
-    pass
-
-
-class RecordTypeError(RecordException):
-    pass
-
-
-class RecordInitializationError(RecordException):
-    pass
-
-
-#{ Validators
-
-
-def _enforce_type_name_validity(type_name):
-    if not is_valid_python_identifier(type_name):
-        raise RecordTypeError(
-            "{} is not a valid identifier for a record type".format(
-                repr(type_name),
-                ),
-            )
-
-
-def _enforce_field_name_validity(field_names):
-    for field_name in field_names:
-        if not is_valid_python_identifier(field_name):
-            raise RecordTypeError(
-                "{} is not a valid field name".format(repr(field_name)),
-                )
-
-
-def _enforce_field_name_uniqueness(field_names):
-    duplicated_field_names = get_duplicated_iterable_items(field_names)
-    if duplicated_field_names:
-        duplicated_field_names_as_string = ", ".join(duplicated_field_names)
-        exception_message = "The following field names are duplicated: {}" \
-            .format(duplicated_field_names_as_string)
-        raise RecordTypeError(exception_message)
-
-
-def _enforce_default_value_correspondance_to_existing_field(
-    field_names,
-    default_values_by_field_name
-    ):
-    for field_name in default_values_by_field_name:
-        if field_name not in field_names:
-            raise RecordTypeError('Unknown field "{}"'.format(field_name))
-
-
-#}
