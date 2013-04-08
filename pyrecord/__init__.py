@@ -29,6 +29,12 @@ class Record(object):
             values_by_field_name,
             )
     
+    @classmethod
+    def init_from_specialization(cls, specialized_record):
+        field_values = {
+            field_name: getattr(specialized_record, field_name) for field_name in cls.field_names}
+        return cls(**field_values)
+    
     def copy(self):
         field_values = {field_name: getattr(self, field_name) for field_name in self.field_names}
         record_copy = self.__class__(**field_values)
