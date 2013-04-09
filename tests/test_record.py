@@ -211,7 +211,13 @@ class TestFieldAccess(object):
         raise SkipTest
     
     def test_getting_all_field_values(self):
-        raise SkipTest
+        point = Point(1, 3)
+        expected_values = {'coordinate_x': 1, 'coordinate_y': 3}
+        actual_values = point.get_field_values()
+        eq_(expected_values, actual_values)
+        
+        actual_values['coordinate_x'] = 7
+        eq_(1, point.coordinate_x, "The field values must've been copied")
     
     def test_setting_valid_field(self):
         raise SkipTest
