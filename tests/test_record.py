@@ -224,4 +224,6 @@ class TestFieldAccess(object):
 
 
 def test_representation():
-    raise SkipTest   # repr()
+    circle = Circle(1, 3, "20")
+    expected_repr = "Circle(coordinate_x=1, coordinate_y=3, radius='20')"
+    eq_(expected_repr, repr(circle))

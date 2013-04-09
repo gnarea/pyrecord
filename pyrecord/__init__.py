@@ -97,6 +97,19 @@ class Record(object):
     def __ne__(self, other):
         return not self.__eq__(other)
     
+    def __repr__(self):
+        field_assignments = []
+        for field_name in self.field_names:
+            field_value = self._values_by_field_name[field_name]
+            field_assignment = "{}={}".format(field_name, repr(field_value))
+            field_assignments.append(field_assignment)
+        
+        record_repr = "{record_type_name}({field_assignments})".format(
+            record_type_name=self.__class__.__name__,
+            field_assignments=", ".join(field_assignments),
+            )
+        return record_repr
+    
     @classmethod
     def _validate_field_values(cls, field_values, values_by_field_name):
         unknown_field_values_count = len(field_values) - len(cls.field_names)
