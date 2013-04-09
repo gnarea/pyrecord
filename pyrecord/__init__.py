@@ -74,8 +74,12 @@ class Record(object):
         return specialized_record
     
     def copy(self):
-        field_values = {field_name: getattr(self, field_name) for field_name in self.field_names}
-        record_copy = self.__class__(**field_values)
+        field_values = {}
+        for field_name in self.field_names:
+            field_values[field_name] = getattr(self, field_name)
+        
+        record_type = self.__class__
+        record_copy = record_type(**field_values)
         return record_copy
     
     def __getattr__(self, name):
