@@ -1,4 +1,5 @@
 from nose.plugins.skip import SkipTest
+from nose.tools import assert_false
 from nose.tools import assert_raises_regexp
 from nose.tools import eq_
 from nose.tools import ok_
@@ -145,16 +146,56 @@ class TestInitialization(object):
 class TestComparison(object):
     
     def test_same_type_and_same_field_values(self):
-        raise SkipTest
+        point1 = Point(1, 3)
+        point2 = Point(1, 3)
+        self.assert_equals(point1, point2)
     
     def test_same_type_and_different_field_values(self):
-        raise SkipTest
+        point1 = Point(2, 4)
+        point2 = Point(6, 8)
+        self.assert_not_equals(point1, point2)
+    
+    def test_different_type_and_same_field_values(self):
+        point = Point(2, 4)
+        
+        AlternativePoint = Record.create_type(
+            "AlternativePoint",
+            "coordinate_x",
+            "coordinate_y",
+            )
+        alternative_point = AlternativePoint(2, 4)
+        
+        self.assert_not_equals(point, alternative_point)
     
     def test_specialization(self):
-        raise SkipTest
+        point = Point(2, 4)
+        circle = Circle(2, 4, 8)
+        self.assert_not_equals(point, circle)
     
-    def test_copy(self):
-        raise SkipTest
+    def test_non_record(self):
+        point = Point(1, 3)
+        self.assert_not_equals(point, object())
+    
+    #{ Check equality in all possible ways
+    
+    # In Python, "a == b = True" DOESN'T necessarily mean that "a != b = False"
+    # nor "b == a = True".
+    
+    @staticmethod
+    def assert_equals(item1, item2):
+        ok_(item1 == item2)
+        ok_(item2 == item1)
+        assert_false(item1 != item2)
+        assert_false(item2 != item1)
+    
+    @staticmethod
+    def assert_not_equals(item1, item2):
+        ok_(item1 != item2)
+        ok_(item2 != item1)
+        assert_false(item1 == item2)
+        assert_false(item2 == item1)
+    
+    #}
 
 
 class TestFieldAccess(object):

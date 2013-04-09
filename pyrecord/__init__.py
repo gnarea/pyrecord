@@ -85,6 +85,18 @@ class Record(object):
             attribute_value = super(Record, self).__getattr__(name)
         return attribute_value
     
+    def __eq__(self, other):
+        have_same_type = self.__class__ == other.__class__
+        if have_same_type:
+            are_equivalent = \
+                self._values_by_field_name == other._values_by_field_name
+        else:
+            are_equivalent = False
+        return are_equivalent
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    
     @classmethod
     def _validate_field_values(cls, field_values, values_by_field_name):
         unknown_field_values_count = len(field_values) - len(cls.field_names)
