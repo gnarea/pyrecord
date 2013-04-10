@@ -1,5 +1,3 @@
-from abc import ABCMeta
-
 from pyrecord._validation.instance_validators import validate_generalization
 from pyrecord._validation.instance_validators import validate_initialization
 from pyrecord._validation.instance_validators import validate_field_access
@@ -11,8 +9,6 @@ __all__ = ["Record"]
 
 
 class Record(object):
-    
-    __metaclass__ = ABCMeta
     
     field_names = ()
     

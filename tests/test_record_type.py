@@ -1,5 +1,3 @@
-from inspect import isabstract
-
 from nose.tools import assert_not_equals
 from nose.tools import assert_raises
 from nose.tools import assert_raises_regexp
@@ -8,10 +6,6 @@ from nose.tools import ok_
 
 from pyrecord import Record
 from pyrecord.exceptions import RecordTypeError
-
-
-def test_abstract():
-    ok_(isabstract(Record))
 
 
 def test_creation():
