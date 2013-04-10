@@ -2,6 +2,7 @@ from abc import ABCMeta
 
 from pyrecord._validation.instance_validators import validate_generalization
 from pyrecord._validation.instance_validators import validate_initialization
+from pyrecord._validation.instance_validators import validate_field_access
 from pyrecord._validation.instance_validators import validate_specialization
 from pyrecord._validation.type_validators import validate_type_definition
 
@@ -70,11 +71,16 @@ class Record(object):
         return field_values
     
     def __getattr__(self, name):
+        validate_field_access(name, self.__class__)
+        
+        field_value = self._field_values[name]
+        return field_value
+     
+    def __setattr__(self, name, value):
         if name in self.field_names:
-            attribute_value = self._field_values[name]
+            self._field_values[name] = value
         else:
-            attribute_value = super(Record, self).__getattr__(name)
-        return attribute_value
+            super(Record, self).__setattr__(name, value)
     
     def __eq__(self, other):
         have_same_type = self.__class__ == other.__class__

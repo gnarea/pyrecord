@@ -1,5 +1,5 @@
-from nose.plugins.skip import SkipTest
 from nose.tools import assert_false
+from nose.tools import assert_not_in
 from nose.tools import assert_raises_regexp
 from nose.tools import eq_
 from nose.tools import ok_
@@ -201,14 +201,18 @@ class TestComparison(object):
 class TestFieldAccess(object):
     
     def test_getting_valid_field(self):
-        raise SkipTest
+        point = Point(1, 3)
+        eq_(1, point.coordinate_x)
     
     def test_getting_invalid_field(self):
-        raise SkipTest
-    
-    def test_getting_valid_attribute_but_not_field(self):
-        # e.g., __dict__
-        raise SkipTest
+        point = Point(1, 3)
+        assert_raises_regexp(
+            AttributeError,
+            '^"Point" has no field "radius"$',
+            getattr,
+            point,
+            "radius",
+            )
     
     def test_getting_all_field_values(self):
         point = Point(1, 3)
@@ -220,13 +224,20 @@ class TestFieldAccess(object):
         eq_(1, point.coordinate_x, "The field values must've been copied")
     
     def test_setting_valid_field(self):
-        raise SkipTest
+        point = Point(1, 3)
+        point.coordinate_x = 5
+        
+        # Ensure it wasn't just set on __dict__
+        field_values = point.get_field_values()
+        eq_(5, field_values['coordinate_x'])
     
     def test_setting_invalid_field(self):
-        raise SkipTest
-    
-    def test_deleting_field(self):
-        raise SkipTest
+        point = Point(1, 3)
+        point.radius = 5
+        
+        # Ensure it wasn't set on __dict__
+        field_values = point.get_field_values()
+        assert_not_in("radius", field_values)
 
 
 def test_representation():

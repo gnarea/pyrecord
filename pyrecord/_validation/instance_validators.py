@@ -4,6 +4,7 @@ from pyrecord.exceptions import RecordInstanceError
 __all__ = [
     "validate_generalization",
     "validate_initialization",
+    "validate_field_access",
     "validate_specialization",
     ]
 
@@ -33,6 +34,13 @@ def validate_specialization(record_type, generalized_record, field_values):
         generalized_record_type,
         field_values,
         )
+
+
+def validate_field_access(field_name, record_type):
+    if field_name not in record_type.field_names:
+        raise AttributeError(
+            '"{}" has no field "{}"'.format(record_type.__name__, field_name),
+            )
 
 
 def _require_type_inheritance(subtype, supertype):
