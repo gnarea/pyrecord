@@ -5,7 +5,7 @@ from nose.tools import eq_
 from nose.tools import ok_
 
 from pyrecord import Record
-from pyrecord import RecordInstanceError
+from pyrecord.exceptions import RecordInstanceError
 
 
 Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
@@ -135,7 +135,7 @@ class TestInitialization(object):
         my_point = Point(1, 3)
         assert_raises_regexp(
             RecordInstanceError,
-            '^Field "coordinate_y" is not specific to Circle$',
+            '^Field "coordinate_y" is already defined in "Point"$',
             Circle.init_from_generalization,
             my_point,
             radius=2,
