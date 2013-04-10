@@ -1,19 +1,12 @@
 from abc import ABCMeta
 
-from pyrecord._validation.instance_validators import \
-    require_existing_field_names
-from pyrecord._validation.instance_validators import require_type_inheritance
-from pyrecord._validation.type_validators import \
-    require_default_value_correspondance_to_existing_field
-from pyrecord._validation.type_validators import require_field_name_uniqueness
-from pyrecord._validation.type_validators import require_field_name_validity
-from pyrecord._validation.type_validators import require_type_name_validity
-from pyrecord.exceptions import RecordInstanceError
+from pyrecord._validation.instance_validators import validate_generalization
+from pyrecord._validation.instance_validators import validate_initialization
+from pyrecord._validation.instance_validators import validate_specialization
+from pyrecord._validation.type_validators import validate_type_definition
 
 
-__all__ = [
-    "Record",
-    ]
+__all__ = ["Record"]
 
 
 class Record(object):
@@ -25,9 +18,14 @@ class Record(object):
     _default_values_by_field_name = {}
     
     def __init__(self, *values_by_field_order, **values_by_field_name):
+        validate_initialization(
+            self.__class__,
+            values_by_field_order,
+            values_by_field_name,
+            )
+        
         super(Record, self).__init__()
         
-        self._validate_field_values(values_by_field_order, values_by_field_name)
         self._field_values = self._merge_field_values(
             values_by_field_order,
             values_by_field_name,
@@ -35,7 +33,7 @@ class Record(object):
     
     @classmethod
     def init_from_specialization(cls, specialized_record):
-        require_type_inheritance(specialized_record.__class__, cls)
+        validate_generalization(cls, specialized_record)
         
         field_values = specialized_record._get_selected_field_values(
             cls.field_names,
@@ -47,26 +45,13 @@ class Record(object):
     def init_from_generalization(
         cls,
         generalized_record,
-        **values_by_field_name
+        **field_values
         ):
-        generalized_record_type = generalized_record.__class__
-        require_type_inheritance(cls, generalized_record_type)
-        
-        extra_specialization_field_names = set(cls.field_names) - \
-            set(generalized_record_type.field_names)
-        for field_name in values_by_field_name:
-            if field_name not in extra_specialization_field_names:
-                raise RecordInstanceError(
-                    'Field "{}" is not specific to {}'.format(
-                        field_name,
-                        cls.__name__,
-                        )
-                    )
+        validate_specialization(cls, generalized_record, field_values)
         
         generalized_record_field_values = generalized_record.get_field_values()
-        values_by_field_name.update(generalized_record_field_values)
-        
-        specialized_record = cls(**values_by_field_name)
+        field_values.update(generalized_record_field_values)
+        specialized_record = cls(**field_values)
         return specialized_record
     
     def copy(self):
@@ -116,36 +101,6 @@ class Record(object):
         return record_repr
     
     @classmethod
-    def _validate_field_values(cls, values_by_field_order, values_by_field_name):
-        unknown_field_values_count = \
-            len(values_by_field_order) - len(cls.field_names)
-        if 0 < unknown_field_values_count:
-            raise RecordInstanceError(
-                "Too many field values: Cannot map {} values to fields".format(
-                    unknown_field_values_count,
-                    )
-                )
-        
-        require_existing_field_names(cls, values_by_field_name.keys())
-        
-        fields_set_by_position = cls.field_names[:len(values_by_field_order)]
-        for field_name in values_by_field_name:
-            if field_name in fields_set_by_position:
-                raise RecordInstanceError(
-                    'Value of field "{}" is already set'.format(field_name),
-                    )
-        
-        fields_set = \
-            fields_set_by_position + \
-            tuple(values_by_field_name.keys()) + \
-            tuple(cls._default_values_by_field_name.keys())
-        for field_name in cls.field_names:
-            if field_name not in fields_set:
-                raise RecordInstanceError(
-                    'Field "{}" is undefined'.format(field_name),
-                    )
-    
-    @classmethod
     def _merge_field_values(cls, values_by_field_order, values_by_field_name):
         field_values = cls._default_values_by_field_name.copy()
         field_values.update(zip(cls.field_names, values_by_field_order))
@@ -162,7 +117,8 @@ class Record(object):
         **default_values_by_field_name
         ):
         
-        cls._validate_type_definition(
+        validate_type_definition(
+            cls,
             type_name,
             field_names,
             default_values_by_field_name,
@@ -174,22 +130,6 @@ class Record(object):
             default_values_by_field_name,
             )
         return record_type
-    
-    @classmethod
-    def _validate_type_definition(
-        cls,
-        type_name,
-        field_names,
-        default_values_by_field_name,
-        ):
-        require_type_name_validity(type_name)
-        
-        require_field_name_uniqueness(cls.field_names + field_names)
-        require_field_name_validity(field_names)
-        require_default_value_correspondance_to_existing_field(
-            field_names,
-            default_values_by_field_name,
-            )
     
     @classmethod
     def _create_type(cls, type_name, field_names, default_values_by_field_name):

@@ -3,7 +3,28 @@ from pyrecord._validation._generic_utils import is_valid_python_identifier
 from pyrecord.exceptions import RecordTypeError
 
 
-def require_type_name_validity(type_name):
+__all__ = [
+    "validate_type_definition",
+    ]
+
+
+def validate_type_definition(
+    supertype,
+    type_name,
+    field_names,
+    default_values_by_field_name,
+    ):
+    _require_type_name_validity(type_name)
+    
+    _require_field_name_uniqueness(supertype.field_names + field_names)
+    _require_field_name_validity(field_names)
+    _require_default_value_correspondance_to_existing_field(
+        field_names,
+        default_values_by_field_name,
+        )
+
+
+def _require_type_name_validity(type_name):
     if not is_valid_python_identifier(type_name):
         raise RecordTypeError(
             "{} is not a valid identifier for a record type".format(
@@ -12,7 +33,7 @@ def require_type_name_validity(type_name):
             )
 
 
-def require_field_name_validity(field_names):
+def _require_field_name_validity(field_names):
     for field_name in field_names:
         if not is_valid_python_identifier(field_name):
             raise RecordTypeError(
@@ -20,7 +41,7 @@ def require_field_name_validity(field_names):
                 )
 
 
-def require_field_name_uniqueness(field_names):
+def _require_field_name_uniqueness(field_names):
     duplicated_field_names = get_duplicated_iterable_items(field_names)
     if duplicated_field_names:
         duplicated_field_names_as_string = ", ".join(duplicated_field_names)
@@ -29,7 +50,7 @@ def require_field_name_uniqueness(field_names):
         raise RecordTypeError(exception_message)
 
 
-def require_default_value_correspondance_to_existing_field(
+def _require_default_value_correspondance_to_existing_field(
     field_names,
     default_values_by_field_name
     ):
