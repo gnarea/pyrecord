@@ -9,7 +9,7 @@ from pyrecord.exceptions import RecordInstanceError
 
 
 Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-Circle = Point.extend_type("Circle", "radius")
+Point3D = Point.extend_type("Point3D", "coordinate_z")
 
 
 class TestInitialization(object):
@@ -26,10 +26,10 @@ class TestInitialization(object):
         eq_(my_point.coordinate_y, 3)
     
     def test_subtype(self):
-        my_circle = Circle(1, 3, 5)
-        eq_(my_circle.coordinate_x, 1)
-        eq_(my_circle.coordinate_y, 3)
-        eq_(my_circle.radius, 5)
+        my_point_3d = Point3D(1, 3, 5)
+        eq_(my_point_3d.coordinate_x, 1)
+        eq_(my_point_3d.coordinate_y, 3)
+        eq_(my_point_3d.coordinate_z, 5)
     
     def test_overriding_default_field_value(self):
         Point = Record.create_type("Point", "coordinate_x", coordinate_x=2)
@@ -90,44 +90,44 @@ class TestInitialization(object):
         eq_(5, derived_point.coordinate_y)
     
     def test_generalization(self):
-        my_circle = Circle(1, 3, 5)
-        my_point = Point.init_from_specialization(my_circle)
+        my_point_3d = Point3D(1, 3, 5)
+        my_point = Point.init_from_specialization(my_point_3d)
         ok_(isinstance(my_point, Point))
-        eq_(my_point.coordinate_x, my_circle.coordinate_x)
-        eq_(my_point.coordinate_y, my_circle.coordinate_y)
+        eq_(my_point.coordinate_x, my_point_3d.coordinate_x)
+        eq_(my_point.coordinate_y, my_point_3d.coordinate_y)
     
     def test_invalid_generalization(self):
         my_point = Point(1, 3)
         assert_raises_regexp(
             RecordInstanceError,
-            "^Record type Point is not a subtype of Circle$",
-            Circle.init_from_specialization,
+            "^Record type Point is not a subtype of Point3D$",
+            Point3D.init_from_specialization,
             my_point,
             )
     
     def test_specialization(self):
         my_point = Point(1, 3)
-        my_circle = Circle.init_from_generalization(my_point, radius=5)
-        ok_(isinstance(my_circle, Circle))
-        eq_(my_circle.coordinate_x, my_point.coordinate_x)
-        eq_(my_circle.coordinate_y, my_point.coordinate_y)
-        eq_(my_circle.radius, 5)
+        my_point_3d = Point3D.init_from_generalization(my_point, coordinate_z=5)
+        ok_(isinstance(my_point_3d, Point3D))
+        eq_(my_point_3d.coordinate_x, my_point.coordinate_x)
+        eq_(my_point_3d.coordinate_y, my_point.coordinate_y)
+        eq_(my_point_3d.coordinate_z, 5)
     
     def test_invalid_specialization(self):
-        my_circle = Circle(1, 3, 5)
+        my_point_3d = Point3D(1, 3, 5)
         assert_raises_regexp(
             RecordInstanceError,
-            "^Record type Point is not a subtype of Circle$",
+            "^Record type Point is not a subtype of Point3D$",
             Point.init_from_generalization,
-            my_circle,
+            my_point_3d,
             )
     
     def test_incomplete_specialization(self):
         my_point = Point(1, 3)
         assert_raises_regexp(
             RecordInstanceError,
-            '^Field "radius" is undefined$',
-            Circle.init_from_generalization,
+            '^Field "coordinate_z" is undefined$',
+            Point3D.init_from_generalization,
             my_point,
             )
     
@@ -136,9 +136,9 @@ class TestInitialization(object):
         assert_raises_regexp(
             RecordInstanceError,
             '^Field "coordinate_y" is already defined in "Point"$',
-            Circle.init_from_generalization,
+            Point3D.init_from_generalization,
             my_point,
-            radius=2,
+            coordinate_z=2,
             coordinate_y=5,
             )
 
@@ -169,8 +169,8 @@ class TestComparison(object):
     
     def test_specialization(self):
         point = Point(2, 4)
-        circle = Circle(2, 4, 8)
-        self.assert_not_equals(point, circle)
+        point_3d = Point3D(2, 4, 8)
+        self.assert_not_equals(point, point_3d)
     
     def test_non_record(self):
         point = Point(1, 3)
@@ -208,10 +208,10 @@ class TestFieldAccess(object):
         point = Point(1, 3)
         assert_raises_regexp(
             AttributeError,
-            '^"Point" has no field "radius"$',
+            '^"Point" has no field "coordinate_z"$',
             getattr,
             point,
-            "radius",
+            "coordinate_z",
             )
     
     def test_getting_all_field_values(self):
@@ -233,14 +233,14 @@ class TestFieldAccess(object):
     
     def test_setting_invalid_field(self):
         point = Point(1, 3)
-        point.radius = 5
+        point.coordinate_z = 5
         
         # Ensure it wasn't set on __dict__
         field_values = point.get_field_values()
-        assert_not_in("radius", field_values)
+        assert_not_in("coordinate_z", field_values)
 
 
 def test_representation():
-    circle = Circle(1, 3, "20")
-    expected_repr = "Circle(coordinate_x=1, coordinate_y=3, radius='20')"
-    eq_(expected_repr, repr(circle))
+    point_3d = Point3D(1, 3, "20")
+    expected_repr = "Point3D(coordinate_x=1, coordinate_y=3, coordinate_z='20')"
+    eq_(expected_repr, repr(point_3d))

@@ -17,10 +17,10 @@ def test_creation():
 
 def test_subtype_creation():
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    Circle = Point.extend_type("Circle", "radius")
-    eq_("Circle", Circle.__name__)
-    ok_(issubclass(Circle, Point))
-    assert_not_equals(Circle, Point)
+    Point3D = Point.extend_type("Point3D", "coordinate_z")
+    eq_("Point3D", Point3D.__name__)
+    ok_(issubclass(Point3D, Point))
+    assert_not_equals(Point3D, Point)
 
 
 def test_creation_with_ilegal_type_name():
@@ -43,7 +43,12 @@ def test_creation_with_ilegal_field_name():
     
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises(RecordTypeError, Point.extend_type, "Circle", "Invalid-Field")
+    assert_raises(
+        RecordTypeError,
+        Point.extend_type,
+        "Point3D",
+        "Invalid-Field",
+        )
 
 
 def test_creation_with_duplicated_field_names():
@@ -74,11 +79,11 @@ def test_creation_with_duplicated_field_names():
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
     assert_raises_regexp(
         RecordTypeError,
-        "^The following field names are duplicated: radius$",
+        "^The following field names are duplicated: coordinate_z$",
         Point.extend_type,
-        "Circle",
-        "radius",
-        "radius",
+        "Point3D",
+        "coordinate_z",
+        "coordinate_z",
         )
     
     # Subtype redefining field in supertype
@@ -87,8 +92,8 @@ def test_creation_with_duplicated_field_names():
         RecordTypeError,
         "^The following field names are duplicated: coordinate_x$",
         Point.extend_type,
-        "Circle",
-        "radius",
+        "Point3D",
+        "coordinate_z",
         "coordinate_x",
         )
 
@@ -99,8 +104,8 @@ def test_getting_field_names():
     eq_(("coordinate_x", "coordinate_y"), Point.field_names)
     
     # Subtype
-    Circle = Point.extend_type("Circle", "radius")
-    eq_(("coordinate_x", "coordinate_y", "radius"), Circle.field_names)
+    Point3D = Point.extend_type("Point3D", "coordinate_z")
+    eq_(("coordinate_x", "coordinate_y", "coordinate_z"), Point3D.field_names)
 
 
 def test_default_value_for_undefined_field():
@@ -120,8 +125,8 @@ def test_default_value_for_undefined_field():
         RecordTypeError,
         '^Unknown field "weight"$',
         Point.extend_type,
-        "Circle",
-        "radius",
+        "Point3D",
+        "coordinate_z",
         weight=3,
         )
     
