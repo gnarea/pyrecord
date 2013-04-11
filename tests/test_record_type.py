@@ -17,7 +17,7 @@ def test_creation():
 
 def test_subtype_creation():
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    Circle = Point.create_type("Circle", "radius")
+    Circle = Point.extend_type("Circle", "radius")
     eq_("Circle", Circle.__name__)
     ok_(issubclass(Circle, Point))
     assert_not_equals(Circle, Point)
@@ -29,7 +29,7 @@ def test_creation_with_ilegal_type_name():
     
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises(RecordTypeError, Point.create_type, "Invalid-Name")
+    assert_raises(RecordTypeError, Point.extend_type, "Invalid-Name")
 
 
 def test_creation_with_ilegal_field_name():
@@ -43,7 +43,7 @@ def test_creation_with_ilegal_field_name():
     
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises(RecordTypeError, Point.create_type, "Circle", "Invalid-Field")
+    assert_raises(RecordTypeError, Point.extend_type, "Circle", "Invalid-Field")
 
 
 def test_creation_with_duplicated_field_names():
@@ -75,7 +75,7 @@ def test_creation_with_duplicated_field_names():
     assert_raises_regexp(
         RecordTypeError,
         "^The following field names are duplicated: radius$",
-        Point.create_type,
+        Point.extend_type,
         "Circle",
         "radius",
         "radius",
@@ -86,7 +86,7 @@ def test_creation_with_duplicated_field_names():
     assert_raises_regexp(
         RecordTypeError,
         "^The following field names are duplicated: coordinate_x$",
-        Point.create_type,
+        Point.extend_type,
         "Circle",
         "radius",
         "coordinate_x",
@@ -99,7 +99,7 @@ def test_getting_field_names():
     eq_(("coordinate_x", "coordinate_y"), Point.field_names)
     
     # Subtype
-    Circle = Point.create_type("Circle", "radius")
+    Circle = Point.extend_type("Circle", "radius")
     eq_(("coordinate_x", "coordinate_y", "radius"), Circle.field_names)
 
 
@@ -119,7 +119,7 @@ def test_default_value_for_undefined_field():
     assert_raises_regexp(
         RecordTypeError,
         '^Unknown field "weight"$',
-        Point.create_type,
+        Point.extend_type,
         "Circle",
         "radius",
         weight=3,

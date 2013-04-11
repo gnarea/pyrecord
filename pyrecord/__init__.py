@@ -111,27 +111,34 @@ class Record(object):
     
     #{ Record type API
     
+    @staticmethod
+    def create_type(type_name, *field_names, **default_values_by_field_name):
+        record_type = Record.extend_type(
+             type_name,
+             *field_names,
+             **default_values_by_field_name
+             )
+        return record_type
+    
     @classmethod
-    def create_type(
+    def extend_type(
         cls,
-        type_name,
+        subtype_name,
         *field_names,
         **default_values_by_field_name
         ):
-        
         validate_type_definition(
             cls,
-            type_name,
+            subtype_name,
             field_names,
             default_values_by_field_name,
             )
-        
-        record_type = cls._create_type(
-            type_name,
+        record_subtype = cls._create_type(
+            subtype_name,
             field_names,
             default_values_by_field_name,
             )
-        return record_type
+        return record_subtype
     
     @classmethod
     def _create_type(cls, type_name, field_names, default_values_by_field_name):

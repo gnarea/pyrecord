@@ -9,7 +9,7 @@ from pyrecord.exceptions import RecordInstanceError
 
 
 Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-Circle = Point.create_type("Circle", "radius")
+Circle = Point.extend_type("Circle", "radius")
 
 
 class TestInitialization(object):
