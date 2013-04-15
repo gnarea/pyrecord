@@ -1,15 +1,39 @@
-.. PyRecord documentation master file, created by
-   sphinx-quickstart on Thu Apr 11 13:24:35 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+***************************************************
+PyRecord: Record Datatype Implementation for Python
+***************************************************
 
-Welcome to PyRecord's documentation!
-====================================
+This library allows you to use `records
+<http://en.wikipedia.org/wiki/Record_(computer_science)>`_ (aka "structs" in C)
+in Python.
 
-Contents:
+A record is a composite datatype with a defined collection of values (each with
+a unique name) and no operations. In Python terms, that'd be an instance of a
+class for which you don't write methods because you're only intested in using
+it to store data. It's like a dictionary, but CONTINUE HERE.
 
-.. toctree::
-   :maxdepth: 2
+
+Type creation
+=============
+
+
+Subtype creation
+================
+
+
+Initialization
+==============
+
+
+Generalization
+==============
+
+
+Specialization
+==============
+
+
+API
+===
 
 
 
