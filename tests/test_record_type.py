@@ -1,5 +1,4 @@
 from nose.tools import assert_not_equals
-from nose.tools import assert_raises
 from nose.tools import assert_raises_regexp
 from nose.tools import eq_
 from nose.tools import ok_
@@ -25,17 +24,28 @@ def test_subtype_creation():
 
 def test_creation_with_ilegal_type_name():
     # Supertype
-    assert_raises(RecordTypeError, Record.create_type, "Invalid-Name")
+    assert_raises_regexp(
+        RecordTypeError,
+        r"^'Invalid-Name' is not a valid identifier for a record type$",
+        Record.create_type,
+        "Invalid-Name",
+        )
     
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises(RecordTypeError, Point.extend_type, "Invalid-Name")
+    assert_raises_regexp(
+        RecordTypeError,
+        r"^'Invalid-Name' is not a valid identifier for a record type$$",
+        Point.extend_type,
+        "Invalid-Name",
+        )
 
 
 def test_creation_with_ilegal_field_name():
     # Supertype
-    assert_raises(
+    assert_raises_regexp(
         RecordTypeError,
+        r"^'coordinate-x' is not a valid field name$",
         Record.create_type,
         "Point",
         "coordinate-x",
@@ -43,8 +53,9 @@ def test_creation_with_ilegal_field_name():
     
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises(
+    assert_raises_regexp(
         RecordTypeError,
+        r"^'Invalid-Field' is not a valid field name$",
         Point.extend_type,
         "Point3D",
         "Invalid-Field",
