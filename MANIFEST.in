@@ -1,0 +1,4 @@
+include VERSION.txt
+include README.md
+include setup.py
+recursive-include pyrecord *
