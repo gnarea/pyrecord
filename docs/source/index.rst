@@ -9,7 +9,7 @@ in Python.
 A record is a composite datatype with a pre-defined collection of values (each
 with a unique name) and no operations. In Python terms, that'd be an instance
 of a class for which you don't write methods because you're only intested in
-using it to store data. The following example demonstrates how this datatype
+using it to hold data. The following example demonstrates how this datatype
 can be used::
 
     >>> from datetime import datetime
