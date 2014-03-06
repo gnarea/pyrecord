@@ -4,4 +4,6 @@ python:
   - "3.2"
   - "2.7"
 install: pip install --use-mirrors .
-script:  nosetests
+before_script: 
+  - pip install -r tests/requirements.txt --use-mirrors
+script:  coverage run --source=pyrecord setup.py test

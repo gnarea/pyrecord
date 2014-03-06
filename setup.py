@@ -13,4 +13,5 @@ setup(
     url="https://pypi.python.org/pypi/pyrecord",
     author="Gustavo Narea",
     author_email="me@gustavonarea.net",
+    test_suite="nose.collector",
     )
