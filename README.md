@@ -7,7 +7,7 @@ tuples and custom classes.
 
 This library allows you to use records in Python v2.7 through v3.x and PyPy v2.
 
-The documentation is available at [http://pythonhosted.org/pyrecord/]().
+The documentation is available at http://pythonhosted.org/pyrecord/
 
 [![Build Status](https://travis-ci.org/gnarea/pyrecord.png?branch=master)][1]
 [![Coverage Status](https://coveralls.io/repos/gnarea/pyrecord/badge.png)][2]
