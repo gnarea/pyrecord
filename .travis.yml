@@ -3,6 +3,7 @@ python:
   - "3.3"
   - "3.2"
   - "2.7"
+  - "pypy"
 install: pip install --use-mirrors .
 before_script: 
   - pip install -r tests/requirements.txt --use-mirrors
