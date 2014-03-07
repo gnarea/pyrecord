@@ -1,13 +1,17 @@
-# PyRecord: *Record* Datatype Implementation for Python
+# PyRecord: Pythonic *Record* Data Type
+
+A [record][4] (aka "struct" in C) is a data type with a pre-defined collection
+of values (each with a unique name) and no operations. Depending on the nature
+of the data, a record may be a superior alternative to dictionaries, named
+tuples and custom classes.
+
+This library allows you to use records in Python v2.7 through v3.x and PyPy v2.
+
+The documentation is available at [http://pythonhosted.org/pyrecord/]().
 
 [![Build Status](https://travis-ci.org/gnarea/pyrecord.png?branch=master)][1]
 [![Coverage Status](https://coveralls.io/repos/gnarea/pyrecord/badge.png)][2]
 [![Downloads](https://pypip.in/d/pyrecord/badge.png)][3]
-
-This library allows you to use [records][4] (aka "structs" in C) in Python.
-
-Only Python v2.7 onwards is officially supported (including v3.x), but it's very
-likely that v2.6 will work just fine (by chance).
 
 [1]: https://travis-ci.org/gnarea/pyrecord
 [2]: https://coveralls.io/r/gnarea/pyrecord
