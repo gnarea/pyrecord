@@ -1,34 +1,60 @@
-*********************************************************
+=========================================================
 **PyRecord**: *Record* Datatype Implementation for Python
-*********************************************************
+=========================================================
 
-This library allows you to use `records
-<http://en.wikipedia.org/wiki/Record_(computer_science)>`_ (aka "structs" in C)
-in Python.
+.. module:: pyrecord
+    :synopsis: Pythonic Record Data Type
+.. moduleauthor:: Gustavo Narea <me@gustavonarea.net>
 
-A record is a composite datatype with a pre-defined collection of values (each
-with a unique name) and no operations. In Python terms, that'd be an instance
-of a class for which you don't write methods because you're only intested in
-using it to hold data. The following example demonstrates how this datatype
-can be used::
+:Author: `Gustavo Narea <http://gustavonarea.net/>`_
+:License: Apache License v2
+:Latest version: |release|
 
-    >>> from datetime import datetime
+.. topic:: Overview
+
+    A `record <http://en.wikipedia.org/wiki/Record_(computer_science)>`_ (aka
+    "struct" in C) is a pre-defined collection of values where each value has
+    a unique name. Depending on the nature of the data, records may be a
+    superior alternative to dictionaries and instances of custom classes.
+    
+    PyRecord allows you to use records in Python v2.7 through v3.x and PyPy v2,
+    and can be thought of as the successor of :class:`~collections.namedtuple`.
+
+In Python terms, a **record** is an instance of any class for which you define some
+attributes but no methods. Such classes, which are known as **record types**,
+can be easily written but require a lot of noisy boilerplate. And this is where
+PyRecord comes into play: It saves you the boilerplate so you can focus on
+what really matters.
+
+The following example demonstrates how you can define record types::
+
     >>> from pyrecord import Record
-    >>> 
-    >>> # Define the record types
-    ... Person = Record.create_type("Person", "name", "email_address")
+    >>> Person = Record.create_type("Person", "name", "email_address")
     >>> Student = Person.extend_type("Student", "courses_read", "graduation_date", graduation_date=None)
     >>> Professor = Person.extend_type("Professor", "course_taught")
-    >>> 
-    >>> # Define the records for the types above
-    ... john_student = Student("John Smith", "jsmith@example.org", ["Calculus", "Economics"])
+
+And this is how you could create some records with those types:
+
+    >>> john_student = Student("John Smith", "jsmith@example.org", ["Calculus", "Economics"])
     >>> john_professor = Professor("John Doe", "john.doe@example.com", "OOP")
     >>> john_professor2 = Professor(email_address="john.doe@example.com", name="John Doe", course_taught="OOP")
     >>> jane_student = Student("Jane Doe", "jane.doe@example.org", ["Calculus", "OOP"], datetime(1995, 10, 4))
     >>> jane_professor = Professor("Jane Doe", "jane.doe@example.org", "Calculus")
-    >>> 
+    >>> alice_student = Student("Alice Smith", "alice.smith@example.org")
+    Traceback (most recent call last):
+      (...)
+    pyrecord.exceptions.RecordInstanceError: Field "courses_read" is undefined
+
+Finally, this is how you would use the records above::
+
     >>> john_student
     Student(name='John Smith', email_address='jsmith@example.org', courses_read=['Calculus', 'Economics'], graduation_date=None)
+    >>> john_student.name
+    'John Smith'
+    >>> john_student.name = "John Smith Jr."
+    >>> john_student
+    Student(name='John Smith Jr.', email_address='jsmith@example.org', courses_read=['Calculus', 'Economics'], graduation_date=None)
+    >>> 
     >>> john_student == john_professor
     False
     >>> john_professor == john_professor2
@@ -43,8 +69,72 @@ can be used::
     >>> jane_person1 == jane_person2
     True
 
-Records are similar to dictionaries and namedtuples in Python, 
+Do you like what you've seen? Read on to learn more.
 
+Usage
+=====
+
+Type creation
+-------------
+
+To create a record type, just call :meth:`Record.create_type` with the
+names of the field in your records. For example, to create a ``Person``
+type with two fields (name and email address), you could do::
+
+    Person = Record.create_type("Person", "name", "email_address")
+
+.. note::
+
+    Because of the way Python works, we cannot infer the name of the new record
+    type by just looking at the name of the variable that will get the result
+    of :meth:`~Record.create_type`. Unfortunately, this means that you have to
+    specify the name twice as in the example above.
+
+To make some fields optional and give them default values, pass such values as
+keyword arguments::
+
+    Person = Record.create_type("Person", "name", "email_address", email_address=None)
+
+
+Subtype creation
+----------------
+
+To extend a record type, you just need to specify the additional fields
+(if any) in a call to the :meth:`~Record.extend_type` method of the type that
+you're inheriting from; for example::
+
+    Student = Person.extend_type("Student", "courses_read", "graduation_date")
+
+Fields in the subtypes can also have default values::
+
+    Student = Person.extend_type("Student", "courses_read", "graduation_date", graduation_date=None)
+
+
+Initialization
+--------------
+
+
+Generalization
+~~~~~~~~~~~~~~
+
+
+Specialization
+~~~~~~~~~~~~~~
+
+
+API
+===
+
+.. autoclass:: Record
+    :members:
+
+
+Best Practices
+==============
+
+No more than 7 fields.
+No mutable values as default field values.
+The class name specified in the arguments should match the variable name.
 
 Alternatives
 ============
@@ -56,35 +146,13 @@ Alternatives
 
 When to use each of those, and when to use a record.
 
-Type creation
-=============
+
+Support
+=======
+
+Questions about modelling should be raised on StackOverflow, for example.
 
 
-Subtype creation
-================
-
-
-Initialization
-==============
-
-
-Generalization
-==============
-
-
-Specialization
-==============
-
-
-API
-===
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Development
+===========
 

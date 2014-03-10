@@ -12,10 +12,13 @@
 # serve to show the default.
 
 import os
+import sys
 
 _CURRENT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 _BRANCH_ROOT = os.path.dirname(os.path.dirname(_CURRENT_DIRECTORY))
 
+# If setting up the auto(module|class) functionality:
+sys.path.append(os.path.abspath(_BRANCH_ROOT))
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
