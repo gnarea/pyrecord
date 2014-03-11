@@ -4,7 +4,7 @@
 
 .. module:: pyrecord
     :synopsis: Pythonic Record Data Type
-.. moduleauthor:: Gustavo Narea <me@gustavonarea.net>
+.. moduleauthor:: Gustavo Narea
 
 :Author: `Gustavo Narea <http://gustavonarea.net/>`_
 :License: Apache License v2
@@ -13,12 +13,12 @@
 .. topic:: Overview
 
     A `record <http://en.wikipedia.org/wiki/Record_(computer_science)>`_ (aka
-    "struct" in C) is a pre-defined collection of values where each value has
-    a unique name. Depending on the nature of the data, records may be a
+    "struct" in C) is a pre-defined collection of values where each is accessed
+    by a unique name. Depending on the nature of the data, records may be a
     superior alternative to dictionaries and instances of custom classes.
     
     PyRecord allows you to use records in Python v2.7 through v3.x and PyPy v2,
-    and can be thought of as the successor of :class:`~collections.namedtuple`.
+    and can be thought of as an improved :class:`~collections.namedtuple`.
 
 In Python terms, a **record** is an instance of any class for which you define some
 attributes but no methods. Such classes, which are known as **record types**,
@@ -74,6 +74,7 @@ Do you like what you've seen? Read on to learn more.
 Usage
 =====
 
+
 Type creation
 -------------
 
@@ -109,18 +110,49 @@ Fields in the subtypes can also have default values::
 
     Student = Person.extend_type("Student", "courses_read", "graduation_date", graduation_date=None)
 
+You can also further extend sub-types if you want to.
+
 
 Initialization
 --------------
+
+Records are initialized by passing the field values in the constructor, which
+can be done by position and/or by name::
+
+    john_student = Student("John Smith", "jsmith@example.org", courses_read=["Calculus", "Economics"])
+
+All the fields with no default values must be specified in the constructor,
+otherwise an exception will be raised.
 
 
 Generalization
 ~~~~~~~~~~~~~~
 
+If ``Person`` is the super-type of ``Student``, we can *generalize*
+a ``Student`` record to a ``Person`` record with
+:meth:`~Record.init_from_specialization`::
+
+    >>> jane_student = Student("Jane Doe", "jane.doe@example.org", ["Calculus", "OOP"])
+    >>> jane_person = Person.init_from_specialization(jane_student)
+    >>> jane_person
+    Person(name='Jane Doe', email_address='jane.doe@example.org')
+
 
 Specialization
 ~~~~~~~~~~~~~~
 
+Likewise, if ``Student`` is a sub-type of ``Person``, we can *specialize*
+a ``Person`` record to a ``Student`` record with
+:meth:`~Record.init_from_generalization`::
+
+    >>> jane_person = Person("Jane Doe", "jane.doe@example.org")
+    >>> jane_student = Student.init_from_generalization(jane_person, courses_read=["OOP"])
+    >>> jane_student
+    Student(name='Jane Doe', email_address='jane.doe@example.org', courses_read=['OOP'], graduation_date=None)
+
+Note that to specialize a record you have to complement the generalization
+(``jane_person`` in the example above) with values for all the additional
+fields defined in the sub-type.
 
 API
 ===

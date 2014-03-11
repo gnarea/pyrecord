@@ -1,7 +1,7 @@
 # PyRecord: Pythonic *Record* Data Type
 
 A [record][4] (aka "struct" in C) is a pre-defined collection of values where
-each has a unique name. Depending on the nature of the data, records
+each is accessed by a unique name. Depending on the nature of the data, records
 may be a superior alternative to dictionaries and instances of custom classes.
 
 PyRecord allows you to use records in Python v2.7 through v3.x and PyPy v2,
