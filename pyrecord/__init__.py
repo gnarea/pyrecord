@@ -23,12 +23,28 @@ __all__ = ["Record"]
 
 
 class Record(object):
+    """Base class for record types."""
 
     field_names = ()
+    """
+    Ordered collection of field names in the current record type.
+
+    This is populated by :meth:`create_type` and :meth:`extend_type`.
+
+    """
 
     _default_values_by_field_name = {}
 
     def __init__(self, *values_by_field_order, **values_by_field_name):
+        """
+
+        :raises pyrecord.exceptions.RecordInstanceError: If too few or too
+            many arguments are passed, or unknown field names are referenced.
+
+        Field values can be passed by position, name or both. When passed by
+        position, the order of the fields in the current record type is used.
+
+        """
         validate_initialization(
             self.__class__,
             values_by_field_order,
@@ -44,6 +60,14 @@ class Record(object):
 
     @classmethod
     def init_from_specialization(cls, specialized_record):
+        """
+        Generalize ``specialized_record`` to an instance of the current
+        record type.
+
+        :raises pyrecord.exceptions.RecordInstanceError: If
+            ``specialized_record`` is not a specialization of the current type.
+
+        """
         validate_generalization(cls, specialized_record)
 
         field_values = specialized_record._get_selected_field_values(
@@ -58,6 +82,18 @@ class Record(object):
         generalized_record,
         **field_values
         ):
+        """
+        Specialize ``generalized_record`` to an instance of the current
+        record type.
+
+        :raises pyrecord.exceptions.RecordInstanceError: If
+            ``generalized_record`` is not a generalization of the current type
+            or ``field_values`` is incomplete.
+
+        Values for any fields specific to the specialization must be passed by
+        name.
+
+        """
         validate_specialization(cls, generalized_record, field_values)
 
         generalized_record_field_values = generalized_record.get_field_values()
@@ -66,12 +102,24 @@ class Record(object):
         return specialized_record
 
     def copy(self):
+        """
+        Return a shallow copy of the current record.
+
+        :rtype: :class:`Record`
+
+        """
         record_type = self.__class__
         field_values = self.get_field_values()
         record_copy = record_type(**field_values)
         return record_copy
 
     def get_field_values(self):
+        """
+        Return the current field values by name.
+
+        :rtype: :class:`dict`
+
+        """
         return self._get_selected_field_values(self.field_names)
 
     def _get_selected_field_values(self, selected_field_names):
@@ -129,7 +177,17 @@ class Record(object):
     def create_type(type_name, *field_names, **default_values_by_field_name):
         """
         Return a new record type of name ``type_name``.
-        
+
+        :param str type_name: The name of the new record type.
+        :raises pyrecord.exceptions.RecordTypeError: If ``type_name`` or some
+            ``field_names`` are not valid Python identifiers, some
+            ``field_names`` are duplicated or ``default_values_by_field_name``
+            refers to an unknown field name.
+        :rtype: A sub-class of :class:`Record`
+
+        All the field names must be passed by position. Any default values
+        for them must be passed by name.
+
         """
         record_type = Record.extend_type(
              type_name,
@@ -146,8 +204,19 @@ class Record(object):
         **default_values_by_field_name
         ):
         """
-        Return a new sub type of name ``type_name`` for the current record type.
-        
+        Return a new sub-type of name ``type_name`` for the current record type.
+
+        :param str subtype_name: The name of the new record sub-type.
+        :raises pyrecord.exceptions.RecordTypeError: If ``subtype_name`` or some
+            ``field_names`` are not valid Python identifiers, some
+            ``field_names`` are duplicated, some ``field_names`` clash with
+            fields in a super-type or ``default_values_by_field_name``
+            refers to an unknown field name.
+        :rtype: A sub-class of the current class
+
+        All the field names must be passed by position. Any default values
+        for them must be passed by name.
+
         """
         validate_type_definition(
             cls,

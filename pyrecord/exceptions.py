@@ -20,12 +20,15 @@ __all__ = [
 
 
 class RecordException(Exception):
+    """Abstract base class for all the exceptions raised by PyRecord."""
     pass
 
 
 class RecordTypeError(RecordException):
+    """Exception for errors at the record type-level."""
     pass
 
 
 class RecordInstanceError(RecordException):
+    """Exception for errors at the record instance-level."""
     pass

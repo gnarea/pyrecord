@@ -128,6 +128,9 @@ API
 .. autoclass:: Record
     :members:
 
+.. automodule:: pyrecord.exceptions
+    :members:
+
 
 Best Practices
 ==============
