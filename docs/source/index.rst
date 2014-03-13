@@ -191,3 +191,12 @@ Questions about modelling should be raised on StackOverflow, for example.
 Development
 ===========
 
+
+Credits
+=======
+
+This implementation of records is inspired by (tagged) records in the Ada
+programming language. As a consequence, good support for inheritance at the
+type and instance levels was an important requirement in the design of this
+library.
+
