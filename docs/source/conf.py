@@ -111,7 +111,7 @@ html_theme = "alabaster"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'description': "Record Datatype Implementation for Python",
+    'description': "Pythonic Record Types",
     'github_user': "gnarea",
     'github_repo': "pyrecord",
     'travis_button': True,

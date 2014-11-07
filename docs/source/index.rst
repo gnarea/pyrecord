@@ -1,6 +1,6 @@
-=========================================================
-**PyRecord**: *Record* Datatype Implementation for Python
-=========================================================
+=====================================
+**PyRecord**: Pythonic *Record* Types
+=====================================
 
 :Author: `Gustavo Narea <http://gustavonarea.net/>`_
 :License: Apache License v2
@@ -13,8 +13,9 @@
     by a unique name. Depending on the nature of the data, records may be a
     superior alternative to dictionaries and instances of custom classes.
     
-    PyRecord allows you to use records in Python v2.7 through v3.x and PyPy v2,
-    and can be thought of as an improved :class:`~collections.namedtuple`.
+    **PyRecord** allows you to use records in Python v2.7 to v3.x and
+    PyPy v2, and can be thought of as an improved
+    :class:`~collections.namedtuple`.
 
 In Python terms, a **record** is an instance of any class for which you define
 some attributes but no methods. Such classes, which are known as **record

@@ -1,10 +1,10 @@
-# PyRecord: Pythonic *Record* Data Type
+# PyRecord: Pythonic *Record* Types
 
 A [record][4] (aka "struct" in C) is a pre-defined collection of values where
 each is accessed by a unique name. Depending on the nature of the data, records
 may be a superior alternative to dictionaries and instances of custom classes.
 
-PyRecord allows you to use records in Python v2.7 through v3.x and PyPy v2,
+**PyRecord** allows you to use records in Python v2.7 to v3.x and PyPy v2,
 and can be thought of as an improved *namedtuple*.
 
 The documentation is available at http://pythonhosted.org/pyrecord/

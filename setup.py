@@ -22,6 +22,7 @@ VERSION = open(path.join(HERE, "VERSION.txt")).readline().rstrip()
 
 setup(
     name="pyrecord",
+    description="Pythonic Record Types",
     version=VERSION,
     packages=find_packages(),
     url="https://pypi.python.org/pypi/pyrecord",
