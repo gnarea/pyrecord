@@ -157,15 +157,6 @@ Note that to specialize a record you have to complement the generalization
 (``jane_person`` in the example above) with values for all the additional
 fields defined in the sub-type.
 
-API
-===
-
-.. autoclass:: Record
-    :members:
-
-.. automodule:: pyrecord.exceptions
-    :members:
-
 
 Best Practices
 ==============
@@ -199,7 +190,7 @@ you should consider that to be a smell.
 
 Most of the time, the solution could be as simple as moving some of those
 fields to a new record type. For instance, if you have a record type for a
-person and a bunch of fields, of which some relate to the person's address, it
+person with a bunch of fields, of which some relate to the person's address, it
 could be tempting to define all those fields in the same record type -- But
 how about creating a separate record type for an address?
 
@@ -236,18 +227,42 @@ this library and could therefore be considered a good example on how to use
 records.
 
 
-Support
-=======
+API
+===
 
-TODO
+.. autoclass:: Record
+    :members:
 
-Questions about modelling should be raised on StackOverflow, for example.
+.. automodule:: pyrecord.exceptions
+    :members:
 
 
-Development
-===========
+Changelog
+=========
 
-TODO
+Version 1.0rc1 (Unreleased)
+---------------------------
+
+Initial release.
+
+
+Support and Development
+=======================
+
+To ask questions, report bugs and request features, `use GitHub
+<https://github.com/gnarea/pyrecord/issues>`_. Questions about modelling your
+data types should be raised on a place like StackOverflow.
+
+Thinking of contributing code? That's great! But please bear the following in
+mind:
+
+- If you'd like to add new features, discuss them with the author before
+  writing the first line of code.
+- Any code you contribute should stick the coding conventions in this project
+  (e.g., PEP-8 and PEP-257 compliant, 100% of unit test coverage) and should
+  ideally be documented as well.
+- By contributing any code, you are making it available under the same license
+  as this project.
 
 
 Credits
@@ -255,5 +270,4 @@ Credits
 
 This implementation of records is inspired by (tagged) records in the Ada
 programming language. As a consequence, good support for inheritance at the
-type and instance levels was an important requirement in the design of this
-library.
+type and instance levels was a key consideration in the design of this library.
