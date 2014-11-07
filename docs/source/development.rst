@@ -12,6 +12,9 @@ mind:
 - By contributing any code, you are making it available under the same license
   as this project.
 
+Once you're ready, please go to `the project page on GitHub
+<https://github.com/gnarea/pyrecord>`_.
+
 
 Credits
 -------

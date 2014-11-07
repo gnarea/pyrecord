@@ -1,5 +1,5 @@
-Get Support
-===========
+Get Help
+========
 
 Questions about modelling your own data types should be raised on a channel
 like `StackOverflow <http://stackoverflow.com/>`_. To ask questions about
