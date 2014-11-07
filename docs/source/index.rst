@@ -249,18 +249,19 @@ Initial release.
 Support and Development
 =======================
 
-To ask questions, report bugs and request features, `use GitHub
-<https://github.com/gnarea/pyrecord/issues>`_. Questions about modelling your
-data types should be raised on a place like StackOverflow.
+Questions about modelling your own data types should be raised on a channel
+like `StackOverflow <http://stackoverflow.com/>`_. To ask questions about
+PyRecord, report bugs and request features, `use GitHub
+<https://github.com/gnarea/pyrecord/issues>`_. 
 
 Thinking of contributing code? That's great! But please bear the following in
 mind:
 
 - If you'd like to add new features, discuss them with the author before
   writing the first line of code.
-- Any code you contribute should stick the coding conventions in this project
-  (e.g., PEP-8 and PEP-257 compliant, 100% of unit test coverage) and should
-  ideally be documented as well.
+- Please stick to the coding conventions in this project (e.g., PEP-8 and
+  PEP-257 compliance, 100% of unit test coverage) and update the documentation
+  to reflect your changes.
 - By contributing any code, you are making it available under the same license
   as this project.
 
