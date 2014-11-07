@@ -20,11 +20,11 @@
     PyRecord allows you to use records in Python v2.7 through v3.x and PyPy v2,
     and can be thought of as an improved :class:`~collections.namedtuple`.
 
-In Python terms, a **record** is an instance of any class for which you define some
-attributes but no methods. Such classes, which are known as **record types**,
-can be easily written but require a lot of noisy boilerplate. And this is where
-PyRecord comes into play: It saves you the boilerplate so you can focus on
-what really matters.
+In Python terms, a **record** is an instance of any class for which you define
+some attributes but no methods. Such classes, which are known as **record
+types**, can be easily written but require a lot of noisy boilerplate. This is
+where PyRecord comes into play: It saves you the boilerplate so you can focus
+on what really matters.
 
 The following example demonstrates how you can define record types::
 
@@ -71,8 +71,11 @@ Finally, this is how you would use the records above::
 
 Do you like what you've seen? Read on to learn more.
 
-Usage
-=====
+Common Usage
+============
+
+Refer to the API documentation below for a comprehensive description of the
+interfaces for record types and records.
 
 
 Type creation
@@ -89,7 +92,7 @@ type with two fields (name and email address), you could do::
     Because of the way Python works, we cannot infer the name of the new record
     type by just looking at the name of the variable that will get the result
     of :meth:`~Record.create_type`. Unfortunately, this means that you have to
-    specify the name twice as in the example above.
+    specify the record type name twice as in the example above.
 
 To make some fields optional and give them default values, pass such values as
 keyword arguments::
@@ -236,11 +239,15 @@ records.
 Support
 =======
 
+TODO
+
 Questions about modelling should be raised on StackOverflow, for example.
 
 
 Development
 ===========
+
+TODO
 
 
 Credits
