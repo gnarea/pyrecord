@@ -1,8 +1,10 @@
-Common Usage
-============
+Typical Usage
+=============
 
-Refer to the API documentation below for a comprehensive description of the
-interfaces for record types and records.
+.. currentmodule:: pyrecord
+
+For a comprehensive description of the interfaces for record types and records,
+please refer to the :doc:`API documentation <api>`.
 
 
 Type creation
