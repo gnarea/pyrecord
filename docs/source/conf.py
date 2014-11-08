@@ -118,8 +118,10 @@ html_theme_options = {
     'analytics_id': "UA-22641273-2",
     }
 
-# Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [alabaster.get_path(), "source"]
+html_theme_path = [
+    alabaster.get_path(),
+    _CURRENT_DIRECTORY,
+    ]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
