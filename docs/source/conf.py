@@ -115,6 +115,7 @@ html_theme_options = {
     'github_user': "gnarea",
     'github_repo': "pyrecord",
     'travis_button': False,
+    'analytics_id': "UA-22641273-2",
     }
 
 # Add any paths that contain custom themes here, relative to this directory.
