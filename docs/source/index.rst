@@ -1,6 +1,6 @@
-=====================================
-**PyRecord**: Pythonic *Record* Types
-=====================================
+=================================
+PyRecord: Pythonic *Record* Types
+=================================
 
 :Author: `Gustavo Narea <http://gustavonarea.net/>`_
 :License: Apache License v2
