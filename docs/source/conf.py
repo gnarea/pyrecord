@@ -114,11 +114,11 @@ html_theme_options = {
     'description': "Pythonic Record Types",
     'github_user': "gnarea",
     'github_repo': "pyrecord",
-    'travis_button': True,
+    'travis_button': False,
     }
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [alabaster.get_path()]
+html_theme_path = [alabaster.get_path(), "source"]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -151,7 +151,7 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    '**': ["about.html", "navigation.html"],
+    '**': ["about.html", "navigation.html", "badges.html"],
     }
 
 # Additional templates that should be rendered to pages, maps page names to
