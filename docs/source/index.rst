@@ -66,6 +66,13 @@ Finally, this is how you would use the records above::
     >>> jane_person1 == jane_person2
     True
 
+PyRecord doesn't have external dependencies and you can `get it from
+PYPI <https://pypi.python.org/pypi/pyrecord/>`_ or install it with pip:
+
+.. code-block:: bash
+
+    pip install pyrecord
+
 Do you like what you've seen? Read on to learn more!
 
 

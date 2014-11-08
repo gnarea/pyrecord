@@ -19,7 +19,7 @@ from setuptools import setup
 
 _HERE = path.abspath(path.dirname(__file__))
 _VERSION = open(path.join(_HERE, "VERSION.txt")).readline().rstrip()
-_README = open(path.join(_HERE, "README.rst")).readline().strip()
+_README = open(path.join(_HERE, "README.rst")).read().strip()
 
 
 setup(
@@ -27,9 +27,22 @@ setup(
     version=_VERSION,
     description="Pythonic Record Types",
     long_description=_README,
-    packages=find_packages(),
     url="http://pythonhosted.org/pyrecord/",
     author="Gustavo Narea",
     author_email="me@gustavonarea.net",
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: Apache Software License",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Libraries",
+        ],
+    keywords="record type struct data structure",
+    license="Apache License, Version 2.0",
+    packages=find_packages(exclude=["tests"]),
+    include_package_data=True,
+    exclude_package_data={'': ['README.rst']},
     test_suite="nose.collector",
     )

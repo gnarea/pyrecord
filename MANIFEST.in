@@ -1,4 +1,9 @@
 include VERSION.txt
 include README.rst
 include setup.py
-recursive-include pyrecord *
+
+recursive-exclude pyrecord *.pyc
+recursive-exclude docs *
+recursive-exclude tests *
+exclude setup.cfg
+exclude MANIFEST.in
