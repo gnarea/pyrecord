@@ -20,19 +20,20 @@ other data types may be better suited for the job:
   only be used when drunk.
 
 
-Do not define more than 7 fields
---------------------------------
+Try not to define more than 7 fields
+------------------------------------
 
 As with any other data type with a static set of elements (e.g., your
 custom classes, named tuples), if you have more than `7 elements
 <http://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two>`_,
-you should consider that to be a smell.
+you should consider that to be a `smell
+<http://en.wikipedia.org/wiki/Code_smell>`_.
 
 Most of the time, the solution could be as simple as moving some of those
 fields to a new record type. For instance, if you have a record type for a
 person with a bunch of fields, of which some relate to the person's address, it
 could be tempting to define all those fields in the same record type -- But
-how about creating a separate record type for an address?
+how about creating a separate record type for the address?
 
 
 Only use immutable values as default field values
@@ -53,6 +54,8 @@ But this is not::
 Refer to any one record type by a single name
 ---------------------------------------------
 
-Yes, it is annoying to have to specify the record type name twice when you
+It is indeed annoying to have to specify the record type name twice when you
 create it, but you should stick to it and consistently refer to any one
-record type by its sole name. Otherwise, your code will be harder to maintain.
+record type by its sole name. Otherwise, your code will be harder to maintain,
+as any exception raised by PyRecord would refer to a class (the record type)
+whose name wouldn't match any Python identifier.
