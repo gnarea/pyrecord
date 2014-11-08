@@ -71,7 +71,7 @@ PYPI <https://pypi.python.org/pypi/pyrecord/>`_ or install it with pip:
 
 .. code-block:: bash
 
-    pip install pyrecord
+    pip install --pre pyrecord
 
 Do you like what you've seen? Read on to learn more!
 
