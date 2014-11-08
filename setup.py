@@ -17,15 +17,18 @@ from os import path
 from setuptools import find_packages
 from setuptools import setup
 
-HERE = path.abspath(path.dirname(__file__))
-VERSION = open(path.join(HERE, "VERSION.txt")).readline().rstrip()
+_HERE = path.abspath(path.dirname(__file__))
+_VERSION = open(path.join(_HERE, "VERSION.txt")).readline().rstrip()
+_README = open(path.join(_HERE, "README.rst")).readline().strip()
+
 
 setup(
     name="pyrecord",
+    version=_VERSION,
     description="Pythonic Record Types",
-    version=VERSION,
+    long_description=_README,
     packages=find_packages(),
-    url="https://pypi.python.org/pypi/pyrecord",
+    url="http://pythonhosted.org/pyrecord/",
     author="Gustavo Narea",
     author_email="me@gustavonarea.net",
     test_suite="nose.collector",
