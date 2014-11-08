@@ -27,7 +27,7 @@ setup(
     version=_VERSION,
     description="Pythonic Record Types",
     long_description=_README,
-    url="http://pythonhosted.org/pyrecord/",
+    url="https://pythonhosted.org/pyrecord/",
     author="Gustavo Narea",
     author_email="me@gustavonarea.net",
     classifiers=[

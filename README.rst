@@ -10,7 +10,7 @@ superior alternative to dictionaries and instances of custom classes.
 **PyRecord** allows you to use records in Python v2.7 to v3.x and
 PyPy v2, and can be thought of as an improved *namedtuple*.
 
-The documentation is available at http://pythonhosted.org/pyrecord/
+The documentation is available at https://pythonhosted.org/pyrecord/
 
 .. image:: https://travis-ci.org/gnarea/pyrecord.png?branch=master
     :target: https://travis-ci.org/gnarea/pyrecord
