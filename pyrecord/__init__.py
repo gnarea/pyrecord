@@ -1,4 +1,4 @@
-# Copyright 2013-2014, Gustavo Narea.
+# Copyright 2013-2015, Gustavo Narea.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from sys import _getframe as get_frame_from_call_stack
+
+from pyrecord._validation.instance_validators import validate_field_access
 from pyrecord._validation.instance_validators import validate_generalization
 from pyrecord._validation.instance_validators import validate_initialization
-from pyrecord._validation.instance_validators import validate_field_access
 from pyrecord._validation.instance_validators import validate_specialization
 from pyrecord._validation.type_validators import validate_type_definition
 
@@ -23,7 +25,14 @@ __all__ = ["Record"]
 
 
 class Record(object):
-    """Base class for record types."""
+    """
+    Base class for record types.
+
+    .. versionchanged:: 1.0rc2
+        Class attribute ``__module__`` is set to the name of the module
+        creating the record type, making it possible to pickle records.
+
+    """
 
     field_names = ()
     """
@@ -239,6 +248,23 @@ class Record(object):
              cls._default_values_by_field_name,
              **default_values_by_field_name
              )
+
+        # Make instances pickable
+        record_type.__module__ = _get_client_module_name()
+
         return record_type
 
     #}
+
+
+def _get_client_module_name():
+    client_module_name = None
+    for stack_index in range(1, 5):
+        frame = get_frame_from_call_stack(stack_index)
+        module_name = frame.f_globals.get("__name__")
+        if module_name != __name__:
+            client_module_name = module_name
+            break
+
+    assert client_module_name, "Could not find name of module using PyRecord"
+    return client_module_name

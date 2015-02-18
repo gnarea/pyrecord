@@ -1,3 +1,6 @@
+from pickle import dumps as pickle_serialize
+from pickle import loads as pickle_deserialize
+
 from nose.tools import assert_false
 from nose.tools import assert_not_in
 from nose.tools import assert_raises_regexp
@@ -244,3 +247,10 @@ def test_representation():
     point_3d = Point3D(1, 3, "20")
     expected_repr = "Point3D(coordinate_x=1, coordinate_y=3, coordinate_z='20')"
     eq_(expected_repr, repr(point_3d))
+
+
+def test_pickability():
+    point = Point(1, 3)
+    point_serialized = pickle_serialize(point)
+    point_deserialized = pickle_deserialize(point_serialized)
+    eq_(point, point_deserialized)

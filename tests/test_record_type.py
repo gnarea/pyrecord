@@ -140,4 +140,13 @@ def test_default_value_for_undefined_field():
         "coordinate_z",
         weight=3,
         )
-    
+
+
+def test_module_name():
+    # Supertype
+    Point = Record.create_type("Point", "coordinate_x")
+    eq_(__name__, Point.__module__)
+
+    # Subtype
+    Point3D = Point.extend_type("Point3D", "coordinate_z")
+    eq_(__name__, Point3D.__module__)
