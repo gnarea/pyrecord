@@ -7,3 +7,4 @@ recursive-exclude docs *
 recursive-exclude tests *
 exclude setup.cfg
 exclude MANIFEST.in
+exclude dev-requirements.txt

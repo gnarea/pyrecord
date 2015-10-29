@@ -1,0 +1,6 @@
+-e .
+ipython
+sphinx
+alabaster == 0.7.6
+nose
+coverage
