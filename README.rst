@@ -12,11 +12,11 @@ PyPy v2, and can be thought of as an improved *namedtuple*.
 
 The documentation is available at https://pythonhosted.org/pyrecord/
 
-.. image:: https://travis-ci.org/gnarea/pyrecord.png?branch=master
+.. image:: https://img.shields.io/travis/gnarea/pyrecord.svg
     :target: https://travis-ci.org/gnarea/pyrecord
     :alt: Build Status
 
-.. image:: https://coveralls.io/repos/gnarea/pyrecord/badge.png?branch=master
+.. image:: https://img.shields.io/coveralls/gnarea/pyrecord/master.svg
     :target: https://coveralls.io/r/gnarea/pyrecord?branch=master
     :alt: Coverage Status
 
