@@ -1,6 +1,5 @@
--e .
+--editable .
 ipython
 sphinx
 alabaster == 0.7.6
-nose
-coverage
+--requirement tests/requirements.txt
