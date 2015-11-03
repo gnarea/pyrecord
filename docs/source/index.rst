@@ -13,8 +13,8 @@ PyRecord: Pythonic *Record* Types
     by a unique name. Depending on the nature of the data, records may be a
     superior alternative to dictionaries and instances of custom classes.
     
-    **PyRecord** allows you to use records in CPython v2.7, CPython v3.3+ and
-    PyPy v1-2, and can be thought of as an improved
+    **PyRecord** allows you to use records in CPython v2.7, CPython v3.3+, PyPy
+    and PyPy v3, and can be thought of as an improved
     :class:`~collections.namedtuple`.
 
 In Python terms, a **record** is an instance of any class for which you define
