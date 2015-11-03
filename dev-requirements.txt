@@ -2,4 +2,5 @@
 ipython
 sphinx
 alabaster == 0.7.6
+wheel
 --requirement tests/requirements.txt
