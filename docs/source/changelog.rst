@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.0.1 (2015-11-03)
+--------------------------
+
+No changes whatsoever from previous release. This is an artificial release
+because PYPI won't allow me to replace the distribution files after they've been
+uploaded.
+
+
 Version 1.0 Final (2015-11-03)
 ------------------------------
 
