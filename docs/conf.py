@@ -17,7 +17,7 @@ import sys
 import alabaster
 
 _CURRENT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-_BRANCH_ROOT = os.path.dirname(os.path.dirname(_CURRENT_DIRECTORY))
+_BRANCH_ROOT = os.path.dirname(_CURRENT_DIRECTORY)
 
 # If setting up the auto(module|class) functionality:
 sys.path.append(os.path.abspath(_BRANCH_ROOT))
