@@ -17,13 +17,13 @@ from pickle import loads as pickle_deserialize
 
 from nose.tools import assert_false
 from nose.tools import assert_not_in
-from nose.tools import assert_raises_regexp
 from nose.tools import eq_
 from nose.tools import ok_
 
 from pyrecord import Record
 from pyrecord.exceptions import RecordInstanceError
 
+from tests._utils import assert_raises_string
 
 Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
 Point3D = Point.extend_type("Point3D", "coordinate_z")
@@ -59,17 +59,17 @@ class TestInitialization(object):
         eq_(my_point.coordinate_x, 2)
 
     def test_skipping_field_without_default_value(self):
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            '^Field "coordinate_x" is undefined$',
+            'Field "coordinate_x" is undefined',
             Point,
             )
 
     def test_setting_unknown_field(self):
         # By position
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            "^Too many field values: Cannot map 2 values to fields$",
+            "Too many field values: Cannot map 2 values to fields",
             Point,
             1,
             3,
@@ -77,9 +77,9 @@ class TestInitialization(object):
             - 1,
             )
         # By name
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            '^Unknown field "coordinate_z"$',
+            'Unknown field "coordinate_z"',
             Point,
             1,
             3,
@@ -87,9 +87,9 @@ class TestInitialization(object):
             )
 
     def test_field_value_set_multiple_times(self):
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            '^Value of field "coordinate_x" is already set$',
+            'Value of field "coordinate_x" is already set',
             Point,
             1,
             3,
@@ -115,16 +115,17 @@ class TestInitialization(object):
 
     def test_invalid_generalization(self):
         my_point = Point(1, 3)
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            "^Record type Point is not a subtype of Point3D$",
+            "Record type Point is not a subtype of Point3D",
             Point3D.init_from_specialization,
             my_point,
             )
 
     def test_specialization(self):
         my_point = Point(1, 3)
-        my_point_3d = Point3D.init_from_generalization(my_point, coordinate_z=5)
+        my_point_3d = \
+            Point3D.init_from_generalization(my_point, coordinate_z=5)
         ok_(isinstance(my_point_3d, Point3D))
         eq_(my_point_3d.coordinate_x, my_point.coordinate_x)
         eq_(my_point_3d.coordinate_y, my_point.coordinate_y)
@@ -132,27 +133,27 @@ class TestInitialization(object):
 
     def test_invalid_specialization(self):
         my_point_3d = Point3D(1, 3, 5)
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            "^Record type Point is not a subtype of Point3D$",
+            "Record type Point is not a subtype of Point3D",
             Point.init_from_generalization,
             my_point_3d,
             )
 
     def test_incomplete_specialization(self):
         my_point = Point(1, 3)
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            '^Field "coordinate_z" is undefined$',
+            'Field "coordinate_z" is undefined',
             Point3D.init_from_generalization,
             my_point,
             )
 
     def test_specialization_overriding_field_values(self):
         my_point = Point(1, 3)
-        assert_raises_regexp(
+        assert_raises_string(
             RecordInstanceError,
-            '^Field "coordinate_y" is already defined in "Point"$',
+            'Field "coordinate_y" is already defined in "Point"',
             Point3D.init_from_generalization,
             my_point,
             coordinate_z=2,
@@ -193,11 +194,6 @@ class TestComparison(object):
         point = Point(1, 3)
         self.assert_not_equals(point, object())
 
-    #{ Check equality in all possible ways
-
-    # In Python, "a == b = True" DOESN'T necessarily mean that "a != b = False"
-    # nor "b == a = True".
-
     @staticmethod
     def assert_equals(item1, item2):
         ok_(item1 == item2)
@@ -212,8 +208,6 @@ class TestComparison(object):
         assert_false(item1 == item2)
         assert_false(item2 == item1)
 
-    #}
-
 
 class TestFieldAccess(object):
 
@@ -223,9 +217,9 @@ class TestFieldAccess(object):
 
     def test_getting_invalid_field(self):
         point = Point(1, 3)
-        assert_raises_regexp(
+        assert_raises_string(
             AttributeError,
-            '^"Point" has no field "coordinate_z"$',
+            '"Point" has no field "coordinate_z"',
             getattr,
             point,
             "coordinate_z",
@@ -259,7 +253,8 @@ class TestFieldAccess(object):
 
 def test_representation():
     point_3d = Point3D(1, 3, "20")
-    expected_repr = "Point3D(coordinate_x=1, coordinate_y=3, coordinate_z='20')"
+    expected_repr = \
+        "Point3D(coordinate_x=1, coordinate_y=3, coordinate_z='20')"
     eq_(expected_repr, repr(point_3d))
 
 

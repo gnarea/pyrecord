@@ -1,4 +1,4 @@
-# Copyright 2013-2014, Gustavo Narea.
+# Copyright 2013-2015, Gustavo Narea.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ def validate_initialization(
     record_type,
     values_by_field_order,
     values_by_field_name,
-    ):
+):
     _require_existing_fields_number(record_type, values_by_field_order)
     _require_existing_field_names(record_type, values_by_field_name.keys())
     _require_one_value_per_field(
@@ -90,20 +90,21 @@ def _require_one_value_per_field(
     record_type,
     values_by_field_order,
     values_by_field_name,
-    ):
+):
     fields_set_by_position = \
         record_type.field_names[:len(values_by_field_order)]
-    
+
     # Check there's at most one value per field
     for field_name in values_by_field_name:
         if field_name in fields_set_by_position:
             raise RecordInstanceError(
                 'Value of field "{}" is already set'.format(field_name),
                 )
-    
+
     # Check there's at least one value per field
     fields_set_by_name = values_by_field_name.keys()
-    fields_with_default_value = record_type._default_values_by_field_name.keys()
+    fields_with_default_value = \
+        record_type._default_values_by_field_name.keys()
     fields_set = \
         fields_set_by_position + \
         tuple(fields_set_by_name) + \

@@ -1,4 +1,4 @@
-# Copyright 2013-2014, Gustavo Narea.
+# Copyright 2013-2015, Gustavo Narea.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ def validate_type_definition(
     type_name,
     field_names,
     default_values_by_field_name,
-    ):
+):
     _require_type_name_validity(type_name)
-    
+
     _require_field_name_uniqueness(supertype.field_names + field_names)
     _require_field_name_validity(field_names)
     _require_default_value_correspondance_to_existing_field(
@@ -67,7 +67,7 @@ def _require_field_name_uniqueness(field_names):
 def _require_default_value_correspondance_to_existing_field(
     field_names,
     default_values_by_field_name
-    ):
+):
     for field_name in default_values_by_field_name:
         if field_name not in field_names:
             raise RecordTypeError('Unknown field "{}"'.format(field_name))

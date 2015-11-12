@@ -13,12 +13,13 @@
 # limitations under the License.
 
 from nose.tools import assert_not_equals
-from nose.tools import assert_raises_regexp
 from nose.tools import eq_
 from nose.tools import ok_
 
 from pyrecord import Record
 from pyrecord.exceptions import RecordTypeError
+
+from tests._utils import assert_raises_string
 
 
 def test_creation():
@@ -38,18 +39,18 @@ def test_subtype_creation():
 
 def test_creation_with_ilegal_type_name():
     # Supertype
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        r"^'Invalid-Name' is not a valid identifier for a record type$",
+        "'Invalid-Name' is not a valid identifier for a record type",
         Record.create_type,
         "Invalid-Name",
         )
 
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        r"^'Invalid-Name' is not a valid identifier for a record type$$",
+        "'Invalid-Name' is not a valid identifier for a record type",
         Point.extend_type,
         "Invalid-Name",
         )
@@ -57,9 +58,9 @@ def test_creation_with_ilegal_type_name():
 
 def test_creation_with_ilegal_field_name():
     # Supertype
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        r"^'coordinate-x' is not a valid field name$",
+        "'coordinate-x' is not a valid field name",
         Record.create_type,
         "Point",
         "coordinate-x",
@@ -67,9 +68,9 @@ def test_creation_with_ilegal_field_name():
 
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        r"^'Invalid-Field' is not a valid field name$",
+        "'Invalid-Field' is not a valid field name",
         Point.extend_type,
         "Point3D",
         "Invalid-Field",
@@ -78,9 +79,9 @@ def test_creation_with_ilegal_field_name():
 
 def test_creation_with_duplicated_field_names():
     # Same field duplicated by position
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        "^The following field names are duplicated: coordinate_x$",
+        "The following field names are duplicated: coordinate_x",
         Record.create_type,
         "Point",
         "coordinate_x",
@@ -88,10 +89,9 @@ def test_creation_with_duplicated_field_names():
         )
 
     # Multiple fields duplicated
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        "^The following field names are duplicated: " \
-            "coordinate_x, coordinate_y$",
+        "The following field names are duplicated: coordinate_x, coordinate_y",
         Record.create_type,
         "Point",
         "coordinate_x",
@@ -102,9 +102,9 @@ def test_creation_with_duplicated_field_names():
 
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        "^The following field names are duplicated: coordinate_z$",
+        "The following field names are duplicated: coordinate_z",
         Point.extend_type,
         "Point3D",
         "coordinate_z",
@@ -113,9 +113,9 @@ def test_creation_with_duplicated_field_names():
 
     # Subtype redefining field in supertype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        "^The following field names are duplicated: coordinate_x$",
+        "The following field names are duplicated: coordinate_x",
         Point.extend_type,
         "Point3D",
         "coordinate_z",
@@ -135,9 +135,9 @@ def test_getting_field_names():
 
 def test_default_value_for_undefined_field():
     # Supertype
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        '^Unknown field "weight"$',
+        'Unknown field "weight"',
         Record.create_type,
         "Point",
         "coordinate_x",
@@ -146,9 +146,9 @@ def test_default_value_for_undefined_field():
 
     # Subtype
     Point = Record.create_type("Point", "coordinate_x", "coordinate_y")
-    assert_raises_regexp(
+    assert_raises_string(
         RecordTypeError,
-        '^Unknown field "weight"$',
+        'Unknown field "weight"',
         Point.extend_type,
         "Point3D",
         "coordinate_z",

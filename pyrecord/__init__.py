@@ -90,7 +90,7 @@ class Record(object):
         cls,
         generalized_record,
         **field_values
-        ):
+    ):
         """
         Specialize ``generalized_record`` to an instance of the current
         record type.
@@ -180,7 +180,7 @@ class Record(object):
         field_values.update(values_by_field_name)
         return field_values
 
-    #{ Record type API
+    # Record type API
 
     @staticmethod
     def create_type(type_name, *field_names, **default_values_by_field_name):
@@ -211,13 +211,14 @@ class Record(object):
         subtype_name,
         *field_names,
         **default_values_by_field_name
-        ):
+    ):
         """
-        Return a new sub-type of name ``type_name`` for the current record type.
+        Return a new sub-type of name ``type_name`` for the current record
+        type.
 
         :param str subtype_name: The name of the new record sub-type.
-        :raises pyrecord.exceptions.RecordTypeError: If ``subtype_name`` or some
-            ``field_names`` are not valid Python identifiers, some
+        :raises pyrecord.exceptions.RecordTypeError: If ``subtype_name`` or
+            some ``field_names`` are not valid Python identifiers, some
             ``field_names`` are duplicated, some ``field_names`` clash with
             fields in a super-type or ``default_values_by_field_name``
             refers to an unknown field name.
@@ -241,7 +242,12 @@ class Record(object):
         return record_subtype
 
     @classmethod
-    def _create_type(cls, type_name, field_names, default_values_by_field_name):
+    def _create_type(
+        cls,
+        type_name,
+        field_names,
+        default_values_by_field_name,
+    ):
         record_type = type(type_name, (cls,), {})
         record_type.field_names = cls.field_names + field_names
         record_type._default_values_by_field_name = dict(
@@ -253,8 +259,6 @@ class Record(object):
         record_type.__module__ = _get_client_module_name()
 
         return record_type
-
-    #}
 
 
 def _get_client_module_name():

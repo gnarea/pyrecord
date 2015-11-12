@@ -7,9 +7,9 @@ python:
   - "3.5"
   - "pypy"
   - "pypy3"
-install: pip install .
-before_script: 
-  - pip install -r tests/requirements.txt
-script:  coverage run --source=pyrecord setup.py test
+install: pip install --requirement dev-requirements.txt
+script:
+  - coverage run --source=pyrecord setup.py test
+  - pep8
 after_success:
   - coveralls
