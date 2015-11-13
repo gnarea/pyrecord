@@ -10,7 +10,6 @@ sphinx == 1.3.1
 alabaster == 0.7.6
 
 # Local development/debugging
-pip == 7.1.2
 setuptools == 18.4
 pep8 == 1.6.2
 nose-pudb == 1.0
