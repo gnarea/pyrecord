@@ -8,9 +8,6 @@ python:
   - "pypy"
   - "pypy3"
 install: pip install --requirement dev-requirements.txt
-script:
-  - coverage run --source=pyrecord setup.py test
-  - pep8
-  - python setup.py sdist
+script: ./verify-codebase.sh
 after_success:
   - coveralls
