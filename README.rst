@@ -19,7 +19,3 @@ The documentation is available at https://pythonhosted.org/pyrecord/
 .. image:: https://img.shields.io/coveralls/gnarea/pyrecord/master.svg
     :target: https://coveralls.io/r/gnarea/pyrecord?branch=master
     :alt: Coverage Status
-
-.. image:: https://img.shields.io/pypi/dm/pyrecord.svg
-    :target: https://pypi.python.org/pypi/pyrecord/
-    :alt: Downloads
